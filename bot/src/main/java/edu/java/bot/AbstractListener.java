@@ -25,8 +25,10 @@ public abstract class AbstractListener implements UpdatesListener {
         this.bot = bot;
         bot.setUpdatesListener(this);
         buildCommands();
-        // TODO SetMyCommands automagically
-//        bot.execute(new SetMyCommands(commands.values().stream().toArray()))
+        com.pengrad.telegrambot.model.BotCommand[] botCommands = commands.values().stream()
+            .map(Command::asBotCommand)
+            .toArray(com.pengrad.telegrambot.model.BotCommand[]::new);
+        bot.execute(new SetMyCommands(botCommands));
     }
 
     private void buildCommands() {
@@ -153,6 +155,10 @@ public abstract class AbstractListener implements UpdatesListener {
             } else {
                 return "/" + name + " - " + description;
             }
+        }
+
+        public com.pengrad.telegrambot.model.BotCommand asBotCommand() {
+            return new com.pengrad.telegrambot.model.BotCommand(name, description);
         }
     }
 }
