@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UpdateNotifierListener extends AbstractListener {
-    public UpdateNotifierListener(final TelegramBot telegramBot) {
+    public UpdateNotifierListener(TelegramBot telegramBot) {
         super(telegramBot);
     }
 
     @Override
-    public String onUnknownCommand(final Update update) {
+    public String onUnknownCommand(Update update) {
         return """
                Неизвестная команда.
                Используйте /help для получения списка команд
@@ -22,25 +22,25 @@ public class UpdateNotifierListener extends AbstractListener {
 
     @BotCommand("start")
     @Description("Зарегистрироваться в боте")
-    public String onStart(final Update update) {
+    public String onStart(Update update) {
         return "onStart";
     }
 
     @BotCommand("track")
     @Description("Начать отслеживание содержимого по ссылке")
-    public String onTrack(final Update update) {
+    public String onTrack(Update update) {
         return "onTrack";
     }
 
     @BotCommand("untrack")
     @Description("Прекратить отслеживание содержимого по ссылке")
-    public String onUntrack(final Update update) {
-        return "onUntrack";
+    public String onUntrack(Update update) {
+        throw new UnsupportedOperationException();
     }
 
     @BotCommand("list")
     @Description("Возвращает список отслеживаемых вами ссылок")
-    public String onList(final Update update) {
+    public String onList(Update update) {
         return "Пусто";
     }
 }

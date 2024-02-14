@@ -10,17 +10,17 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 @EnableConfigurationProperties(ApplicationConfig.class)
 public class BotApplication {
-    public static void main(final String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(BotApplication.class, args);
     }
 
     @Bean
-    public TelegramBot telegramBot(final ApplicationConfig config) {
+    public TelegramBot telegramBot(ApplicationConfig config) {
         return new TelegramBot(config.telegramToken());
     }
 
     @Bean
-    public UpdateNotifierListener updateNotifierListener(final TelegramBot telegramBot) {
+    public UpdateNotifierListener updateNotifierListener(TelegramBot telegramBot) {
         return new UpdateNotifierListener(telegramBot);
     }
 }
