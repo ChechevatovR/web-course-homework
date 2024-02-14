@@ -74,9 +74,8 @@ public abstract class AbstractListener implements UpdatesListener {
                 processResponse(update, response);
             } catch (final IllegalAccessException e) {
                 throw new AssertionError("Can't access public method", e);
-            } catch (final InvocationTargetException e) {
-                // TODO Catch and write to user
-                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                sendMessage(update, "Произошла ошибка: " + e.getCause());
             }
         };
     }
@@ -89,13 +88,17 @@ public abstract class AbstractListener implements UpdatesListener {
         if (response == null) {
             // Likely, method's return type was void.
             // No need to do anything
-        } else if (response instanceof final String responseString) {
-            final SendMessage sendMessageRequest = new SendMessage(update.message().chat().id(), responseString);
-            sendMessageRequest.parseMode(ParseMode.Markdown);
-            bot.execute(sendMessageRequest);
+        } else if (response instanceof String responseString) {
+            sendMessage(update, responseString);
         } else {
             throw new AssertionError("Unknown return type");
         }
+    }
+
+    protected final void sendMessage(Update update, String textMarkdown) {
+        SendMessage sendMessageRequest = new SendMessage(update.message().chat().id(), textMarkdown);
+        sendMessageRequest.parseMode(ParseMode.Markdown);
+        bot.execute(sendMessageRequest);
     }
 
     @Override
@@ -105,15 +108,13 @@ public abstract class AbstractListener implements UpdatesListener {
             final String text = message.text();
             final String commandSlashed = text.split(" ", 2)[0];
             if (!commandSlashed.startsWith("/")) {
-                // TODO Send message to user
-                System.err.println("Command in message not found: " + text);
+                sendMessage(update, "В сообщении не найдено команды");
                 continue;
             }
             final String commandName = commandSlashed.substring(1);
             final Command command = commands.get(commandName);
             if (command == null) {
-                // TODO Send message to user
-                System.err.println("Unknown command in message: " + text);
+                sendMessage(update, "Неизвестная команда: " + commandName);
                 continue;
             }
             command.consumer.accept(update);
