@@ -45,10 +45,10 @@ public abstract class AbstractListener implements UpdatesListener {
                 getConsumerForMethod(method)
             );
             if (commands.put(commandAnnotation.value(), command) != null) {
-                final String errorMessage =
-                    "Found multiple handlers for command " + commandAnnotation.value() + " in class " +
-                    getClass().getName();
-                throw new AssertionError(errorMessage);
+                throw new BotCommandMethodException(
+                    "Found multiple handlers for command " + commandAnnotation.value(),
+                    clazz
+                );
             }
         }
     }
@@ -56,19 +56,16 @@ public abstract class AbstractListener implements UpdatesListener {
     private Consumer<Update> getConsumerForMethod(final Method method) {
         final Class<?>[] parameterTypes = method.getParameterTypes();
         if (parameterTypes.length != 1 || parameterTypes[0] != Update.class) {
-            // TODO Make Custom Exception class to simplify building message
-            final String errorMessage =
-                "Bot command methods must accept only one argument, of type " + Update.class.getName() +
-                System.lineSeparator() +
-                "Method: " + method.getName() + " of class " + getClass().getName();
-            throw new AssertionError(errorMessage);
+            throw new BotCommandMethodException(
+                "Bot command methods must accept exactly one argument, of type " + Update.class.getName(),
+                method
+            );
         }
         if (!Modifier.isPublic(method.getModifiers())) {
-            // TODO Make Custom Exception class to simplify building message
-            final String errorMessage =
-                "Bot command methods must be public" + System.lineSeparator() +
-                "Method: " + method.getName() + " of class " + getClass().getName();
-            throw new AssertionError(errorMessage);
+            throw new BotCommandMethodException(
+                "Bot command methods must be public",
+                method
+            );
         }
         return (final Update update) -> {
             try {
@@ -132,6 +129,24 @@ public abstract class AbstractListener implements UpdatesListener {
         return commands.values().stream()
             .map(Command::toString)
             .collect(Collectors.joining(System.lineSeparator()));
+    }
+
+    public static class BotCommandMethodException extends RuntimeException {
+        public BotCommandMethodException(String message, Class<?> clazz) {
+            super(
+                message
+                + System.lineSeparator()
+                + "Class: " + clazz.getName()
+            );
+        }
+
+        public BotCommandMethodException(String message, Method method) {
+            super(
+                message
+                + System.lineSeparator()
+                + "Method: " + method.getName()
+            );
+        }
     }
 
     public class Command {
