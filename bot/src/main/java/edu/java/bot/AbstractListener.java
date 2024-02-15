@@ -14,6 +14,7 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.springframework.context.annotation.Description;
@@ -66,6 +67,12 @@ public abstract class AbstractListener implements UpdatesListener {
         if (!Modifier.isPublic(method.getModifiers())) {
             throw new BotCommandMethodException(
                 "Bot command methods must be public",
+                method
+            );
+        }
+        if (!Set.of("void", "java.lang.String").contains(method.getReturnType().getName())) {
+            throw new BotCommandMethodException(
+                "Bot command method's return type is not supported",
                 method
             );
         }
