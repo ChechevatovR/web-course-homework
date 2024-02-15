@@ -27,12 +27,12 @@ public class UpdateNotifierListener extends AbstractListener {
     @BotCommand("untrack")
     @Description("Прекратить отслеживание содержимого по ссылке")
     public String onUntrack(Update update) {
-        throw new UnsupportedOperationException();
+        return "onUntrack";
     }
 
     @BotCommand("list")
     @Description("Возвращает список отслеживаемых вами ссылок")
     public String onList(Update update) {
-        return "Пусто";
+        return "onList";
     }
 }

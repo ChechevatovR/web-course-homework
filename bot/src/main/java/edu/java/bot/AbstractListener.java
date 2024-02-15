@@ -90,6 +90,8 @@ public abstract class AbstractListener implements UpdatesListener {
     }
 
     private Object[] prepareArgs(Update update, Method method) {
+        // Сюда в будущем можно добавить подготовку аргументов для более сложных команд
+        // Например, разбор сообщения для команд, содержащих аргументы
         return new Object[] {update};
     }
 
