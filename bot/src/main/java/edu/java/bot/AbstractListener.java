@@ -116,7 +116,7 @@ public abstract class AbstractListener implements UpdatesListener {
             String commandName = commandSlashed.substring(1);
             Command command = commands.get(commandName);
             if (command == null) {
-                sendMessage(update, "Неизвестная команда: " + commandName);
+                onUnknownCommand(update, commandName);
                 continue;
             }
             command.consumer.accept(update);
@@ -124,7 +124,14 @@ public abstract class AbstractListener implements UpdatesListener {
         return CONFIRMED_UPDATES_ALL;
     }
 
-    public abstract String onUnknownCommand(Update update);
+    public void onUnknownCommand(Update update, String commandName) {
+        String responseText =
+            "Неизвестная команда: "
+            + commandName
+            + System.lineSeparator()
+            + "Используйте /help для получения списка команд";
+        sendMessage(update, responseText);
+    }
 
     @BotCommand("help")
     @Description("Возвращает список доступных команд")

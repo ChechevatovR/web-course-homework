@@ -12,14 +12,6 @@ public class UpdateNotifierListener extends AbstractListener {
         super(telegramBot);
     }
 
-    @Override
-    public String onUnknownCommand(Update update) {
-        return """
-               Неизвестная команда.
-               Используйте /help для получения списка команд
-               """;
-    }
-
     @BotCommand("start")
     @Description("Зарегистрироваться в боте")
     public String onStart(Update update) {
