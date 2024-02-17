@@ -14,10 +14,7 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
-public class GzipDecompressingInterceptor implements ClientHttpRequestInterceptor {
-
-    public static final String CONTENT_ENCODING = "content-encoding";
-
+public class GZIPDecompressingInterceptor implements ClientHttpRequestInterceptor {
     @Override
     @NotNull
     public ClientHttpResponse intercept(
@@ -26,24 +23,24 @@ public class GzipDecompressingInterceptor implements ClientHttpRequestIntercepto
         ClientHttpRequestExecution execution
     ) throws IOException {
         ClientHttpResponse response = execution.execute(request, body);
-        List<String> encoding = response.getHeaders().get(CONTENT_ENCODING);
+        List<String> encoding = response.getHeaders().get(HttpHeaders.CONTENT_ENCODING);
         if (encoding == null || encoding.size() != 1 || !Objects.equals(encoding.get(0), "gzip")) {
             return response;
         } else {
-            return new GzipCompressedResponse(response);
+            return new GZIPCompressedResponse(response);
         }
     }
 
-    public static class GzipCompressedResponse implements ClientHttpResponse {
+    public static class GZIPCompressedResponse implements ClientHttpResponse {
         public final ClientHttpResponse delegate;
         private final HttpHeaders headers;
         private final byte[] decompressedBody;
 
-        public GzipCompressedResponse(ClientHttpResponse delegate) throws IOException {
+        public GZIPCompressedResponse(ClientHttpResponse delegate) throws IOException {
             this.delegate = delegate;
             headers = new HttpHeaders();
             headers.addAll(delegate.getHeaders());
-            headers.remove(CONTENT_ENCODING);
+            headers.remove(HttpHeaders.CONTENT_ENCODING);
 
             GZIPInputStream stream = new GZIPInputStream(delegate.getBody());
             decompressedBody = stream.readAllBytes();
