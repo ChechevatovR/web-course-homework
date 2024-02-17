@@ -2,7 +2,7 @@ package edu.java.scrapper.clients.stackoverflow.model;
 
 public record User(
     long id,
-    long account_id,
+    long accountId,
     String url,
     String displayName,
     int reputation
