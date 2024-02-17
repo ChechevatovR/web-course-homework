@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.java.scrapper.clients.stackoverflow.model.User;
 
 public record UserResponse(
-    @JsonProperty("accountId")
+    @JsonProperty("account_id")
     long accountId,
     @JsonProperty("display_name")
     String displayName,
     String link,
     int reputation,
-    @JsonProperty("userId")
+    @JsonProperty("user_id")
     long userId
     ) {
     public User asModel() {
