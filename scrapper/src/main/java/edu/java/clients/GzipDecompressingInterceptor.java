@@ -1,10 +1,12 @@
 package edu.java.clients;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.zip.GZIPInputStream;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatusCode;
@@ -17,9 +19,10 @@ public class GzipDecompressingInterceptor implements ClientHttpRequestIntercepto
     public static final String CONTENT_ENCODING = "content-encoding";
 
     @Override
+    @NotNull
     public ClientHttpResponse intercept(
-        HttpRequest request,
-        byte[] body,
+        @NotNull HttpRequest request,
+        byte @NotNull [] body,
         ClientHttpRequestExecution execution
     ) throws IOException {
         ClientHttpResponse response = execution.execute(request, body);
@@ -34,12 +37,18 @@ public class GzipDecompressingInterceptor implements ClientHttpRequestIntercepto
     public static class GzipCompressedResponse implements ClientHttpResponse {
         public final ClientHttpResponse delegate;
         private final HttpHeaders headers;
+        private final byte[] decompressedBody;
 
-        public GzipCompressedResponse(ClientHttpResponse delegate) {
+        public GzipCompressedResponse(ClientHttpResponse delegate) throws IOException {
             this.delegate = delegate;
             headers = new HttpHeaders();
             headers.addAll(delegate.getHeaders());
             headers.remove(CONTENT_ENCODING);
+
+            GZIPInputStream stream = new GZIPInputStream(delegate.getBody());
+            decompressedBody = stream.readAllBytes();
+
+            headers.setContentLength(decompressedBody.length);
         }
 
         @Override
@@ -58,9 +67,8 @@ public class GzipDecompressingInterceptor implements ClientHttpRequestIntercepto
         }
 
         @Override
-        public InputStream getBody() throws IOException {
-            GZIPInputStream stream = new GZIPInputStream(delegate.getBody());
-            return stream;
+        public InputStream getBody() {
+            return new ByteArrayInputStream(decompressedBody);
         }
 
         @Override
