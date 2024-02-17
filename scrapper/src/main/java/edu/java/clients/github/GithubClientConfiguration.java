@@ -1,6 +1,5 @@
 package edu.java.clients.github;
 
-import java.util.Objects;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,15 +9,13 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
 public class GithubClientConfiguration {
-    @Value("${app.clients.github.base-url :#{null}}")
+    @Value("#{@applicationConfig.clients.github.baseUrl}")
     public String baseUrl;
-    public static final String DEFAULT_BASE_URL = "https://api.github.com/";
 
     @Bean
-    GithubClient githubClient() {
-        String actualBaseUrl = Objects.requireNonNullElse(baseUrl, DEFAULT_BASE_URL);
+    public GithubApi githubApi() {
         RestClient restClient = RestClient.builder()
-            .baseUrl(actualBaseUrl)
+            .baseUrl(baseUrl)
             .defaultHeader("X-GitHub-Api-Version", "2022-11-28")
             .defaultHeader("Accept", "application/vnd.github+json")
             .build();
@@ -26,6 +23,11 @@ public class GithubClientConfiguration {
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter).build();
 
         GithubApi api = factory.createClient(GithubApi.class);
+        return api;
+    }
+
+    @Bean
+    public GithubClient githubClient(GithubApi api) {
         GithubClient client = new GithubClient(api);
 
 //        Object repository = client.getRepository("Kotlin", "kotlinx.coroutines");

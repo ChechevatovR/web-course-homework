@@ -2,7 +2,6 @@ package edu.java.clients.stackoverflow;
 
 import edu.java.clients.GzipDecompressingInterceptor;
 import java.util.Map;
-import java.util.Objects;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,19 +11,16 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
 public class StackOverflowClientConfiguration {
-    @Value("${app.clients.stackoverflow.base-url:#{null}}")
+    @Value("#{@applicationConfig.clients.stackoverflow.baseUrl}")
     public String baseUrl;
-    public static final String DEFAULT_BASE_URL = "https://api.stackexchange.com/2.3";
 
-
-    @Value("${app.clients.stackoverflow.filter}")
+    @Value("#{@applicationConfig.clients.stackoverflow.filter}")
     public String filter;
 
     @Bean
-    StackOverflowClient stackOverflowClient() {
-        String actualBaseUrl = Objects.requireNonNullElse(baseUrl, DEFAULT_BASE_URL);
+    public StackOverflowApi stackOverflowApi() {
         RestClient restClient = RestClient.builder()
-            .baseUrl(actualBaseUrl + "?site={site}&filter={filter}")
+            .baseUrl(baseUrl + "?site={site}&filter={filter}")
             .defaultUriVariables(Map.of(
                 "site", "stackoverflow",
                 "filter", filter
@@ -35,6 +31,11 @@ public class StackOverflowClientConfiguration {
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter).build();
 
         StackOverflowApi api = factory.createClient(StackOverflowApi.class);
+        return api;
+    }
+
+    @Bean
+    public StackOverflowClient stackOverflowClient(StackOverflowApi api) {
         StackOverflowClient client = new StackOverflowClient(api);
 
 //        Object commentsForPost = client.getCommentsForPost(13);
