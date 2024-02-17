@@ -1,37 +1,44 @@
 package edu.java.clients.stackoverflow.model.api;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import edu.java.clients.stackoverflow.model.Question;
 import java.time.OffsetDateTime;
 import java.util.List;
 
 public class QuestionResponse {
-    public long accepted_answer_id;
+    @JsonAlias("accepted_answer_id")
+    public long acceptedAnswerId;
     public List<AnswerResponse> answers = List.of();
     public String body;
-    public OffsetDateTime closed_date;
+    @JsonAlias("closed_date")
+    public OffsetDateTime closedDate;
     public List<CommentResponse> comments = List.of();
-    public OffsetDateTime creation_date;
-    public boolean is_answered;
-    public OffsetDateTime last_activity_date;
+    @JsonAlias("creationDate")
+    public OffsetDateTime creationDate;
+    @JsonAlias("isAnswered")
+    public boolean isAnswered;
+    @JsonAlias("lastActivityDate")
+    public OffsetDateTime lastActivityDate;
     public String link;
     public UserResponse owner;
-    public long question_id;
+    @JsonAlias("question_id")
+    public long questionId;
     public int score;
     public String title;
 
     public Question asModel() {
         return new Question(
-            question_id,
+            questionId,
             link,
             score,
             title,
             body,
             owner.asModel(),
-            is_answered,
+            isAnswered,
             answers.stream().map(AnswerResponse::asModel).toList(),
-            closed_date,
-            creation_date,
-            last_activity_date,
+            closedDate,
+            creationDate,
+            lastActivityDate,
             comments.stream().map(CommentResponse::asModel).toList()
         );
     }

@@ -8,8 +8,8 @@ public record Repository(
     String name,
     String description,
     User owner,
-    OffsetDateTime pushed_at,
-    OffsetDateTime created_at,
-    OffsetDateTime updated_at
+    OffsetDateTime pushedAt,
+    OffsetDateTime createdAt,
+    OffsetDateTime updatedAt
 ) {
 }

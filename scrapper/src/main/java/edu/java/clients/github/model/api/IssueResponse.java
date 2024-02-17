@@ -1,5 +1,6 @@
 package edu.java.clients.github.model.api;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import edu.java.clients.github.model.Issue;
 import java.time.OffsetDateTime;
 
@@ -12,9 +13,12 @@ public record IssueResponse(
     UserResponse user,
     String state,
     boolean locked,
-    OffsetDateTime created_at,
-    OffsetDateTime updated_at,
-    OffsetDateTime closed_at
+    @JsonAlias("created_at")
+    OffsetDateTime createdAt,
+    @JsonAlias("updated_at")
+    OffsetDateTime updatedAt,
+    @JsonAlias("closed_at")
+    OffsetDateTime closedAt
 ) {
     public Issue asModel() {
         return new Issue(
@@ -26,9 +30,9 @@ public record IssueResponse(
             user.asModel(),
             state,
             locked,
-            created_at,
-            updated_at,
-            closed_at
+            createdAt,
+            updatedAt,
+            closedAt
         );
     }
 }

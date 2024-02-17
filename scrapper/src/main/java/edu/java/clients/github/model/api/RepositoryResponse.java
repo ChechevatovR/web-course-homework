@@ -1,5 +1,6 @@
 package edu.java.clients.github.model.api;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import edu.java.clients.github.model.Repository;
 import java.time.OffsetDateTime;
 
@@ -9,13 +10,23 @@ public record RepositoryResponse(
     String name,
     String description,
     UserResponse owner,
-    OffsetDateTime pushed_at,
-    OffsetDateTime created_at,
-    OffsetDateTime updated_at
+    @JsonAlias("pushed_at")
+    OffsetDateTime pushedAt,
+    @JsonAlias("created_at")
+    OffsetDateTime createdAt,
+    @JsonAlias("updated_at")
+    OffsetDateTime updatedAt
 ) {
     public Repository asModel() {
         return new Repository(
-            id, url, name, description, owner.asModel(), pushed_at, created_at, updated_at
+            id,
+            url,
+            name,
+            description,
+            owner.asModel(),
+            pushedAt,
+            createdAt,
+            updatedAt
         );
     }
 }

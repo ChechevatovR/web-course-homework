@@ -22,15 +22,15 @@ public class GithubClient {
         return api.getIssuesForRepository(owner, repo).stream().map(IssueResponse::asModel).toList();
     }
 
-    public Issue getIssue(String owner, String repo, int issue_number) {
-        return api.getIssue(owner, repo, issue_number).asModel();
+    public Issue getIssue(String owner, String repo, int issueNumber) {
+        return api.getIssue(owner, repo, issueNumber).asModel();
     }
 
     public List<PullRequest> getPullsForRepository(String owner, String repo) {
         return api.getPullsForRepository(owner, repo).stream().map(PullRequestResponse::asModel).toList();
     }
 
-    public PullRequest getPull(String owner, String repo, int pull_number) {
-        return api.getPull(owner, repo, pull_number).asModel();
+    public PullRequest getPull(String owner, String repo, int pullNumber) {
+        return api.getPull(owner, repo, pullNumber).asModel();
     }
 }

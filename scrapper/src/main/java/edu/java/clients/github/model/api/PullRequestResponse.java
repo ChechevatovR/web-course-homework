@@ -1,5 +1,6 @@
 package edu.java.clients.github.model.api;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import edu.java.clients.github.model.PullRequest;
 import java.time.OffsetDateTime;
 
@@ -12,10 +13,14 @@ public record PullRequestResponse(
     UserResponse user,
     String state,
     boolean locked,
-    OffsetDateTime created_at,
-    OffsetDateTime updated_at,
-    OffsetDateTime closed_at,
-    OffsetDateTime merged_at
+    @JsonAlias("created_at")
+    OffsetDateTime createdAt,
+    @JsonAlias("updated_at")
+    OffsetDateTime updatedAt,
+    @JsonAlias("closed_at")
+    OffsetDateTime closedAt,
+    @JsonAlias("merged_at")
+    OffsetDateTime mergedAt
 ) {
     public PullRequest asModel() {
         return new PullRequest(
@@ -27,10 +32,10 @@ public record PullRequestResponse(
             user.asModel(),
             state,
             locked,
-            created_at,
-            updated_at,
-            closed_at,
-            merged_at
+            createdAt,
+            updatedAt,
+            closedAt,
+            mergedAt
         );
     }
 }

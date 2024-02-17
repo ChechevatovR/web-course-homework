@@ -11,11 +11,9 @@ public record PullRequest(
     User user,
     String state,
     boolean locked,
-    OffsetDateTime created_at,
-    OffsetDateTime updated_at,
-    OffsetDateTime closed_at,
-    OffsetDateTime merged_at
-//    UserResponse assignee,
-//    List<UserResponse> requestedReviewers
+    OffsetDateTime createdAt,
+    OffsetDateTime updatedAt,
+    OffsetDateTime closedAt,
+    OffsetDateTime mergedAt
     ) {
 }

@@ -3,18 +3,19 @@ package edu.java.clients.stackoverflow.model;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-public record Question (
+public record Question(
     long id,
     String url,
     int score,
     String title,
     String body,
     User owner,
-    boolean is_answered,
+    boolean isAnswered,
     List<Answer> answers,
-    OffsetDateTime closed_date,
-    OffsetDateTime creation_date,
-    OffsetDateTime last_activity_date,
+    OffsetDateTime closedDate,
+
+    OffsetDateTime creationDate,
+    OffsetDateTime lastActivityDate,
     List<Comment> comments
 ) {
 }

@@ -1,21 +1,21 @@
 package edu.java.clients.stackoverflow.model.api;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import edu.java.clients.stackoverflow.model.Comment;
 import java.time.OffsetDateTime;
 
 // https://api.stackexchange.com/docs/types/comment
 public record CommentResponse(
     String body,
-    long comment_id,
-    OffsetDateTime creation_date,
+    @JsonAlias("comment_id")
+    long id,
+    @JsonAlias("creationDate")
+    OffsetDateTime creationDate,
     String link,
     UserResponse owner,
-//    long post_id,
     int score
-)
-{
-
+) {
     public Comment asModel() {
-        return new Comment(comment_id, link, score, body, owner.asModel(), creation_date);
+        return new Comment(id, link, score, body, owner.asModel(), creationDate);
     }
 }

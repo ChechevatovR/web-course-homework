@@ -11,8 +11,8 @@ public record Answer(
     String title,
     String body,
     List<Comment> comments,
-    OffsetDateTime creation_date,
+    OffsetDateTime creationDate,
     User owner,
-    OffsetDateTime last_activity_date
+    OffsetDateTime lastActivityDate
 ) {
 }

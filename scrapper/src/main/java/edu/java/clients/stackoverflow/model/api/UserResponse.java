@@ -1,14 +1,17 @@
 package edu.java.clients.stackoverflow.model.api;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import edu.java.clients.stackoverflow.model.User;
 
 public record UserResponse(
-    long user_id,
+    @JsonAlias("user_id")
+    long id,
     String link,
-    String display_name,
+    @JsonAlias("display_name")
+    String displayName,
     int reputation
 ) {
     public User asModel() {
-        return new User(user_id, link, display_name, reputation);
+        return new User(id, link, displayName, reputation);
     }
 }

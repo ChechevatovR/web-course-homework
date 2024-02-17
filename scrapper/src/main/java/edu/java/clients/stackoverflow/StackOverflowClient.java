@@ -18,11 +18,11 @@ public class StackOverflowClient {
         return api.getQuestion(id).items().get(0).asModel();
     }
 
-    List<Answer> getAnswersForQuestion( int id) {
+    List<Answer> getAnswersForQuestion(int id) {
         return api.getAnswersForQuestion(id).items().stream().map(AnswerResponse::asModel).toList();
     }
 
-    List<Comment> getCommentsForPost( int id) {
+    List<Comment> getCommentsForPost(int id) {
         return api.getCommentsForPost(id).items().stream().map(CommentResponse::asModel).toList();
     }
 }
