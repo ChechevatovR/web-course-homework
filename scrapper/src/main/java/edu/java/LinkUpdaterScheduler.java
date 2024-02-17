@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class LinkUpdaterScheduler {
 
-    @Scheduled(fixedDelayString = "${app.scheduler.interval}", timeUnit = java.util.concurrent.TimeUnit.SECONDS)
+    @Scheduled(fixedDelayString = "#{@applicationConfig.scheduler.interval.toMillis()}")
     void update() {
         log.debug("scheduled");
     }
