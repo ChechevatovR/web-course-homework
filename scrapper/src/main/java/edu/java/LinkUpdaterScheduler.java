@@ -1,13 +1,15 @@
 package edu.java;
 
-import org.springframework.scheduling.annotation.EnableScheduling;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-@EnableScheduling
+@Component
+@Log4j2
 public class LinkUpdaterScheduler {
 
-    @Scheduled(fixedDelayString = "#{${app.scheduler.interval}}")
+    @Scheduled(fixedDelayString = "${app.scheduler.interval}", timeUnit = java.util.concurrent.TimeUnit.SECONDS)
     void update() {
-        System.err.println("scheduled");
+        log.debug("scheduled");
     }
 }
