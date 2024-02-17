@@ -1,21 +1,24 @@
 package edu.java.clients.github;
 
-import edu.java.clients.github.model.Issue;
-import edu.java.clients.github.model.PullRequest;
+import java.util.Objects;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
-import java.util.List;
 
 @Configuration
 public class GithubClientConfiguration {
+    @Value("${app.clients.github.base-url :#{null}}")
+    public String baseUrl;
+    public static final String DEFAULT_BASE_URL = "https://api.github.com/";
 
     @Bean
     GithubClient githubClient() {
+        String actualBaseUrl = Objects.requireNonNullElse(baseUrl, DEFAULT_BASE_URL);
         RestClient restClient = RestClient.builder()
-            .baseUrl("https://api.github.com/")
+            .baseUrl(actualBaseUrl)
             .defaultHeader("X-GitHub-Api-Version", "2022-11-28")
             .defaultHeader("Accept", "application/vnd.github+json")
             .build();

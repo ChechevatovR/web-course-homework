@@ -1,40 +1,30 @@
 package edu.java.clients.stackoverflow;
 
 import edu.java.clients.GzipDecompressingInterceptor;
-import edu.java.clients.github.GithubClient;
-import edu.java.clients.stackoverflow.model.Answer;
-import edu.java.clients.stackoverflow.model.Comment;
-import edu.java.clients.stackoverflow.model.Question;
+import java.util.Map;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.client.ClientHttpRequestExecution;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
-import org.springframework.web.util.DefaultUriBuilderFactory;
-import org.springframework.web.util.UriBuilder;
-import org.springframework.web.util.UriBuilderFactory;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
-import java.io.IOException;
-import java.net.URI;
-import java.util.List;
-import java.util.Map;
 
 @Configuration
 public class StackOverflowClientConfiguration {
-//    @Value("#{${app.clients.stackoverflow.baseUri}}")
-    public String baseUri = "https://api.stackexchange.com/2.3";
-    public String filter = "!BByLnZ1QNx_zLScMFi.8Pz6HIwMox1_ImiqaT5V1oBML_rwYaA-OOGYnkF0NLH*5-jYC--cO4ynL";
+    @Value("${app.clients.stackoverflow.base-url:#{null}}")
+    public String baseUrl;
+    public static final String DEFAULT_BASE_URL = "https://api.stackexchange.com/2.3";
+
+
+    @Value("${app.clients.stackoverflow.filter}")
+    public String filter;
 
     @Bean
     StackOverflowClient stackOverflowClient() {
+        String actualBaseUrl = Objects.requireNonNullElse(baseUrl, DEFAULT_BASE_URL);
         RestClient restClient = RestClient.builder()
-            .baseUrl(baseUri + "?site={site}&filter={filter}")
+            .baseUrl(actualBaseUrl + "?site={site}&filter={filter}")
             .defaultUriVariables(Map.of(
                 "site", "stackoverflow",
                 "filter", filter
