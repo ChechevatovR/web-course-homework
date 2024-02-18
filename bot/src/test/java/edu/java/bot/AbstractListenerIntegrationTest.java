@@ -96,6 +96,14 @@ public class AbstractListenerIntegrationTest {
         Assertions.assertEquals(ParseMode.Markdown.name(), captured.getParameters().get("parse_mode"));
     }
 
+    @Test
+    void testUnknownUpdate() {
+        Update update = Mockito.mock(Update.class);
+        Assertions.assertDoesNotThrow(
+            () -> listener.process(List.of(update))
+        );
+    }
+
     private static class TestListener extends AbstractListener {
         public TestListener(TelegramBot bot) {
             super(bot);
