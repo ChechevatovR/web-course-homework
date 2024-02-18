@@ -18,96 +18,22 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public abstract class AbstractListener implements UpdatesListener {
     public final TelegramBot bot;
-    protected final Map<String, Command> commands = new HashMap<>();
+    protected final Map<String, Command> commands;
 
     public AbstractListener(TelegramBot bot) {
         this.bot = bot;
         bot.setUpdatesListener(this);
-        buildCommands();
+        commands = new BotCommandBuilder(this).buildCommands();
         com.pengrad.telegrambot.model.BotCommand[] botCommands = commands.values().stream()
             .map(Command::asBotCommand)
             .toArray(com.pengrad.telegrambot.model.BotCommand[]::new);
         bot.execute(new SetMyCommands(botCommands));
     }
 
-    private void buildCommands() {
-        Class<? extends AbstractListener> clazz = getClass();
-        Method[] methods = clazz.getMethods();
-        for (Method method : methods) {
-            BotCommand commandAnnotation = method.getAnnotation(BotCommand.class);
-            Description descriptionAnnotation = method.getAnnotation(Description.class);
-            if (commandAnnotation == null) {
-                continue;
-            }
-            Command command = new Command(
-                commandAnnotation.value(),
-                descriptionAnnotation == null ? null : descriptionAnnotation.value(),
-                getConsumerForMethod(method)
-            );
-            if (commands.put(commandAnnotation.value(), command) != null) {
-                throw new MethodHandlerSignatureException(
-                    "Found multiple handlers for command " + commandAnnotation.value(),
-                    clazz
-                );
-            }
-        }
-    }
-
-    private Consumer<Update> getConsumerForMethod(Method method) {
-        Class<?>[] parameterTypes = method.getParameterTypes();
-        if (parameterTypes.length != 1 || parameterTypes[0] != Update.class) {
-            throw new MethodHandlerSignatureException(
-                "Bot command methods must accept exactly one argument, of type " + Update.class.getName(),
-                method
-            );
-        }
-        if (!Modifier.isPublic(method.getModifiers())) {
-            throw new MethodHandlerSignatureException(
-                "Bot command methods must be public",
-                method
-            );
-        }
-        if (!Set.of("void", "java.lang.String").contains(method.getReturnType().getName())) {
-            throw new MethodHandlerSignatureException(
-                "Bot command method's return type is not supported",
-                method
-            );
-        }
-        return (final Update update) -> {
-            try {
-                Object[] args = prepareArgs(update, method);
-                Object response = method.invoke(this, args);
-                processResponse(update, response);
-            } catch (IllegalAccessException e) {
-                throw new AssertionError("Can't access public method", e);
-            } catch (InvocationTargetException e) {
-                sendMessage(update, "Произошла ошибка: " + e.getCause());
-            }
-        };
-    }
-
-    private Object[] prepareArgs(Update update, Method method) {
-        // Сюда в будущем можно добавить подготовку аргументов для более сложных команд
-        // Например, разбор сообщения для команд, содержащих аргументы
-        return new Object[] {update};
-    }
-
-    private void processResponse(Update update, Object response) {
-        if (response == null) {
-            // Likely, method's return type was void.
-            // No need to do anything
-        } else if (response instanceof String responseString) {
-            sendMessage(update, responseString);
-        } else {
-            throw new AssertionError("Unknown response type");
-        }
-    }
-
-    protected final void sendMessage(Update update, String textMarkdown) {
+    public final void sendMessage(Update update, String textMarkdown) {
         SendMessage sendMessageRequest = new SendMessage(update.message().chat().id(), textMarkdown);
         sendMessageRequest.parseMode(ParseMode.Markdown);
         bot.execute(sendMessageRequest);
@@ -139,34 +65,6 @@ public abstract class AbstractListener implements UpdatesListener {
             }
         }
         return CONFIRMED_UPDATES_ALL;
-    }
-
-    public class Command {
-        public final String name;
-        public final String description;
-
-        // TODO add usage arguments for commands
-        // public final String usage;
-        public final Consumer<Update> consumer;
-
-        public Command(String name, String description, Consumer<Update> consumer) {
-            this.name = name;
-            this.description = description;
-            this.consumer = consumer;
-        }
-
-        @Override
-        public String toString() {
-            if (description == null) {
-                return "/" + name;
-            } else {
-                return "/" + name + " - " + description;
-            }
-        }
-
-        public com.pengrad.telegrambot.model.BotCommand asBotCommand() {
-            return new com.pengrad.telegrambot.model.BotCommand(name, description);
-        }
     }
 
     public void onException(Update update, BotException exception) {
