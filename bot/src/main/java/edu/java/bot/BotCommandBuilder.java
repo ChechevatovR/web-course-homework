@@ -36,7 +36,7 @@ public class BotCommandBuilder {
             Command command = new Command(
                 commandAnnotation.value(),
                 descriptionAnnotation == null ? null : descriptionAnnotation.value(),
-                commandAnnotation.usage(),
+                commandAnnotation.args(),
                 orderAnnotation == null ? Command.DEFAULT_ORDER : orderAnnotation.value(),
                 getConsumerForMethod(method)
             );

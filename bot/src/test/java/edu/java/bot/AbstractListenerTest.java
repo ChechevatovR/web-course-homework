@@ -22,16 +22,14 @@ public class AbstractListenerTest {
         String s = listener.onHelp(null);
 
         List<String> lines = s.lines().toList();
-        Set<String> linesUnique = new HashSet<>(lines);
 
         Assertions.assertEquals(5, lines.size());
-        Assertions.assertEquals(lines.size(), linesUnique.size());
 
-        Assertions.assertTrue(linesUnique.contains("/help - Возвращает список доступных команд"));
-        Assertions.assertTrue(linesUnique.contains("/untrack - Прекратить отслеживание содержимого по ссылке"));
-        Assertions.assertTrue(linesUnique.contains("/start - Зарегистрироваться в боте"));
-        Assertions.assertTrue(linesUnique.contains("/track - Начать отслеживание содержимого по ссылке"));
-        Assertions.assertTrue(linesUnique.contains("/list - Возвращает список отслеживаемых вами ссылок"));
+        Assertions.assertEquals("/list - Возвращает список отслеживаемых вами ссылок", lines.get(0));
+        Assertions.assertEquals("/track `<url>` - Начать отслеживание содержимого по ссылке", lines.get(1));
+        Assertions.assertEquals("/untrack `<url>` - Прекратить отслеживание содержимого по ссылке", lines.get(2));
+        Assertions.assertEquals("/start - Зарегистрироваться в боте", lines.get(3));
+        Assertions.assertEquals("/help - Возвращает список доступных команд", lines.get(4));
     }
 
     @Test

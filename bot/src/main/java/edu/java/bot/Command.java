@@ -1,6 +1,8 @@
 package edu.java.bot;
 
 import com.pengrad.telegrambot.model.Update;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class Command {
@@ -8,20 +10,20 @@ public class Command {
     public static final int DEFAULT_ORDER = 0;
     public final String name;
     public final String description;
-    public final String usage;
+    public final List<String> args;
     public final int order;
     public final Consumer<Update> consumer;
 
     public Command(
         String name,
         String description,
-        String usage,
+        String[] args,
         int order,
         Consumer<Update> consumer
     ) {
         this.name = name;
         this.description = description;
-        this.usage = usage;
+        this.args = Arrays.stream(args).toList();
         this.order = order;
         this.consumer = consumer;
     }
@@ -29,10 +31,10 @@ public class Command {
     public Command(
         String name,
         String description,
-        String usage,
+        String[] args,
         Consumer<Update> consumer
     ) {
-        this(name, description, usage, DEFAULT_ORDER, consumer);
+        this(name, description, args, DEFAULT_ORDER, consumer);
     }
 
     public Command(
@@ -55,8 +57,8 @@ public class Command {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("/" + name);
-        if (usage != null && !usage.isBlank()) {
-            sb.append(" ").append(usage);
+        if (args != null && !args.isEmpty()) {
+            args.stream().forEach(arg -> sb.append(" `").append(arg).append('`'));
         }
         if (description != null && !description.isBlank()) {
             sb.append(" - ").append(description);

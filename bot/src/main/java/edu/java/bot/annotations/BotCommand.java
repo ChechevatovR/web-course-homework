@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 public @interface BotCommand {
     String value();
 
-    String usage() default "";
+    String[] args() default {};
 }
