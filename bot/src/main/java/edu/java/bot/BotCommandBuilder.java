@@ -78,7 +78,7 @@ public class BotCommandBuilder {
             } catch (IllegalAccessException e) {
                 throw new AssertionError("Can't access public method", e);
             } catch (InvocationTargetException e) {
-                listener.onException(update, new MethodHandlerInvocationException(e));
+                throw new MethodHandlerInvocationException(e.getCause());
             }
         };
     }

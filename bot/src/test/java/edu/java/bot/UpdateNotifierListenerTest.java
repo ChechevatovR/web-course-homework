@@ -54,7 +54,7 @@ public class UpdateNotifierListenerTest {
     @Test
     void testOnUnknown() {
         Update update = TestUtils.mockMessage("/ping");
-        listener.onException(update, new UnknownCommand("ping"));
+        listener.handleException(update, new UnknownCommand("ping"));
 
         ArgumentCaptor<SendMessage> captor = ArgumentCaptor.forClass(SendMessage.class);
         Mockito.verify(bot).execute(captor.capture());

@@ -15,7 +15,9 @@ import edu.java.bot.exceptions.UnknownCommand;
 import edu.java.bot.exceptions.UnsupportedUpdate;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public abstract class AbstractListener implements UpdatesListener {
     public final TelegramBot bot;
     protected final Map<String, Command> commands;
@@ -40,31 +42,35 @@ public abstract class AbstractListener implements UpdatesListener {
     public int process(List<Update> updates) {
         for (Update update : updates) {
             try {
-                if (update.message() == null || update.message().text() == null) {
-                    throw new UnsupportedUpdate(update);
-                }
-                Message message = update.message();
-                String text = message.text();
-                String commandSlashed = text.split(" ", 2)[0];
-                if (!commandSlashed.startsWith("/")) {
-                    throw new NoCommandInMessage(update);
-                }
-                String commandName = commandSlashed.substring(1);
-                Command command = commands.get(commandName);
-                if (command == null) {
-                    throw new UnknownCommand(commandName);
-                }
-                command.consumer.accept(update);
+                processOneUpdate(update);
             } catch (BotException e) {
-                onException(update, e);
+                handleException(update, e);
             } catch (RuntimeException e) {
-                onException(update, new MethodHandlerInvocationException(e));
+                handleException(update, new MethodHandlerInvocationException(e));
             }
         }
         return CONFIRMED_UPDATES_ALL;
     }
 
-    public void onException(Update update, BotException exception) {
+    public void processOneUpdate(Update update) {
+        if (update.message() == null || update.message().text() == null) {
+            throw new UnsupportedUpdate(update);
+        }
+        Message message = update.message();
+        String text = message.text();
+        String commandSlashed = text.split(" ", 2)[0];
+        if (!commandSlashed.startsWith("/")) {
+            throw new NoCommandInMessage(update);
+        }
+        String commandName = commandSlashed.substring(1);
+        Command command = commands.get(commandName);
+        if (command == null) {
+            throw new UnknownCommand(commandName);
+        }
+        command.consumer.accept(update);
+    }
+
+    public void handleException(Update update, BotException exception) {
         switch (exception) {
             case UnknownCommand e -> {
                 String responseText =
@@ -86,7 +92,7 @@ public abstract class AbstractListener implements UpdatesListener {
                 throw new AssertionError("Unreachable");
             }
             case UnsupportedUpdate e -> {
-                // no-op
+                log.trace("Received unsupported update: " + e.update);
             }
         }
     }
