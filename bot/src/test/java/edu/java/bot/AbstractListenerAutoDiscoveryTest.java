@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.annotations.BotCommand;
+import edu.java.bot.exceptions.MethodHandlerSignatureException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,7 @@ public class AbstractListenerAutoDiscoveryTest {
     @Test
     void testAutoMethodDiscoveryArgsNoFails() {
         Assertions.assertThrows(
-            AbstractListener.BotCommandMethodException.class,
+            MethodHandlerSignatureException.class,
             () -> new TestListenerNoArgs(bot)
         );
     }
@@ -21,7 +22,7 @@ public class AbstractListenerAutoDiscoveryTest {
     @Test
     void testAutoMethodDiscoveryArgsExtraFails() {
         Assertions.assertThrows(
-            AbstractListener.BotCommandMethodException.class,
+            MethodHandlerSignatureException.class,
             () -> new TestListenerExtraArgs(bot)
         );
     }
@@ -29,7 +30,7 @@ public class AbstractListenerAutoDiscoveryTest {
     @Test
     void testAutoMethodDiscoveryArgsUnsupportedFails() {
         Assertions.assertThrows(
-            AbstractListener.BotCommandMethodException.class,
+            MethodHandlerSignatureException.class,
             () -> new TestListenerUnsupportedArgs(bot)
         );
     }
@@ -49,7 +50,7 @@ public class AbstractListenerAutoDiscoveryTest {
     @Test
     void testAutoMethodDiscoveryReturnUnsupportedFails() {
         Assertions.assertThrows(
-            AbstractListener.BotCommandMethodException.class,
+            MethodHandlerSignatureException.class,
             () -> new TestListenerReturnUnsupported(bot)
         );
     }
@@ -57,7 +58,7 @@ public class AbstractListenerAutoDiscoveryTest {
     @Test
     void testAutoMethodDiscoveryMultipleHandlersFails() {
         Assertions.assertThrows(
-            AbstractListener.BotCommandMethodException.class,
+            MethodHandlerSignatureException.class,
             () -> new TestListenerMultipleHandlers(bot)
         );
     }

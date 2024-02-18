@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
+import edu.java.bot.exceptions.UnknownCommand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -53,7 +54,7 @@ public class UpdateNotifierListenerTest {
     @Test
     void testOnUnknown() {
         Update update = TestUtils.mockMessage("/ping");
-        listener.onUnknownCommand(update, "ping");
+        listener.onException(update, new UnknownCommand("ping"));
 
         ArgumentCaptor<SendMessage> captor = ArgumentCaptor.forClass(SendMessage.class);
         Mockito.verify(bot).execute(captor.capture());

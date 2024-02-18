@@ -8,16 +8,17 @@ import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import edu.java.bot.annotations.BotCommand;
+import edu.java.bot.exceptions.*;
+import org.springframework.context.annotation.Description;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import org.springframework.context.annotation.Description;
 
 public abstract class AbstractListener implements UpdatesListener {
     public final TelegramBot bot;
@@ -48,7 +49,7 @@ public abstract class AbstractListener implements UpdatesListener {
                 getConsumerForMethod(method)
             );
             if (commands.put(commandAnnotation.value(), command) != null) {
-                throw new BotCommandMethodException(
+                throw new MethodHandlerSignatureException(
                     "Found multiple handlers for command " + commandAnnotation.value(),
                     clazz
                 );
@@ -59,19 +60,19 @@ public abstract class AbstractListener implements UpdatesListener {
     private Consumer<Update> getConsumerForMethod(Method method) {
         Class<?>[] parameterTypes = method.getParameterTypes();
         if (parameterTypes.length != 1 || parameterTypes[0] != Update.class) {
-            throw new BotCommandMethodException(
+            throw new MethodHandlerSignatureException(
                 "Bot command methods must accept exactly one argument, of type " + Update.class.getName(),
                 method
             );
         }
         if (!Modifier.isPublic(method.getModifiers())) {
-            throw new BotCommandMethodException(
+            throw new MethodHandlerSignatureException(
                 "Bot command methods must be public",
                 method
             );
         }
         if (!Set.of("void", "java.lang.String").contains(method.getReturnType().getName())) {
-            throw new BotCommandMethodException(
+            throw new MethodHandlerSignatureException(
                 "Bot command method's return type is not supported",
                 method
             );
@@ -115,31 +116,29 @@ public abstract class AbstractListener implements UpdatesListener {
     @Override
     public int process(List<Update> updates) {
         for (Update update : updates) {
-            Message message = update.message();
-            String text = message.text();
-            String commandSlashed = text.split(" ", 2)[0];
-            if (!commandSlashed.startsWith("/")) {
-                sendMessage(update, "В сообщении не найдено команды");
-                continue;
+            try {
+                if (update.message() == null || update.message().text() == null) {
+                    throw new UnsupportedUpdate(update);
+                }
+                Message message = update.message();
+                String text = message.text();
+                String commandSlashed = text.split(" ", 2)[0];
+                if (!commandSlashed.startsWith("/")) {
+                    throw new NoCommandInMessage(update);
+                }
+                String commandName = commandSlashed.substring(1);
+                Command command = commands.get(commandName);
+                if (command == null) {
+                    throw new UnknownCommand(commandName);
+                }
+                command.consumer.accept(update);
+            } catch (BotException e) {
+                onException(update, e);
+            } catch (RuntimeException e) {
+                onException(update, new MethodHandlerInvocationException(e));
             }
-            String commandName = commandSlashed.substring(1);
-            Command command = commands.get(commandName);
-            if (command == null) {
-                onUnknownCommand(update, commandName);
-                continue;
-            }
-            command.consumer.accept(update);
         }
         return CONFIRMED_UPDATES_ALL;
-    }
-
-    public void onUnknownCommand(Update update, String commandName) {
-        String responseText =
-            "Неизвестная команда: "
-            + commandName
-            + System.lineSeparator()
-            + "Используйте /help для получения списка команд";
-        sendMessage(update, responseText);
     }
 
     @BotCommand("help")
@@ -148,24 +147,6 @@ public abstract class AbstractListener implements UpdatesListener {
         return commands.values().stream()
             .map(Command::toString)
             .collect(Collectors.joining(System.lineSeparator()));
-    }
-
-    public static class BotCommandMethodException extends RuntimeException {
-        public BotCommandMethodException(String message, Class<?> clazz) {
-            super(
-                message
-                + System.lineSeparator()
-                + "Class: " + clazz.getName()
-            );
-        }
-
-        public BotCommandMethodException(String message, Method method) {
-            super(
-                message
-                + System.lineSeparator()
-                + "Method: " + method.getName()
-            );
-        }
     }
 
     public class Command {
@@ -193,6 +174,33 @@ public abstract class AbstractListener implements UpdatesListener {
 
         public com.pengrad.telegrambot.model.BotCommand asBotCommand() {
             return new com.pengrad.telegrambot.model.BotCommand(name, description);
+        }
+    }
+
+    public void onException(Update update, BotException exception) {
+        switch (exception) {
+            case UnknownCommand e -> {
+                String responseText =
+                    "Неизвестная команда: "
+                    + e.command
+                    + System.lineSeparator()
+                    + "Используйте /help для получения списка команд";
+                sendMessage(update, responseText);
+            }
+            case NoCommandInMessage e -> {
+                sendMessage(update, "В сообщении не найдено команды");
+            }
+            case MethodHandlerInvocationException e -> {
+                sendMessage(update, "В боте произошла ошибка: " + e.getCause());
+            }
+            case MethodHandlerSignatureException e -> {
+                // Method signature must have been checked at startup
+                // Not when message was received.
+                throw new AssertionError("Unreachable");
+            }
+            case UnsupportedUpdate e -> {
+                // no-op
+            }
         }
     }
 }
