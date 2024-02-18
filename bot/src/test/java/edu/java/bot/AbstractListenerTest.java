@@ -5,9 +5,12 @@ import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.annotations.BotCommand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.Description;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class AbstractListenerTest {
 
@@ -46,7 +49,7 @@ public class AbstractListenerTest {
         Assertions.assertTrue(linesUnique.contains("/ping"));
     }
 
-    private static class TestListener extends AbstractListener {
+    private static class TestListener extends AutoHelpListener {
         public TestListener(TelegramBot bot) {
             super(bot);
         }

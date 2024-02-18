@@ -6,13 +6,12 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.annotations.BotCommand;
-import org.apache.commons.lang3.NotImplementedException;
+import java.util.List;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import java.util.List;
-import java.util.stream.IntStream;
 
 public class AbstractListenerIntegrationTest {
 

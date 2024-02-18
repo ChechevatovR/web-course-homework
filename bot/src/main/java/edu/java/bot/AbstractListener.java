@@ -141,14 +141,6 @@ public abstract class AbstractListener implements UpdatesListener {
         return CONFIRMED_UPDATES_ALL;
     }
 
-    @BotCommand("help")
-    @Description("Возвращает список доступных команд")
-    public String onHelp(Update update) {
-        return commands.values().stream()
-            .map(Command::toString)
-            .collect(Collectors.joining(System.lineSeparator()));
-    }
-
     public class Command {
         public final String name;
         public final String description;

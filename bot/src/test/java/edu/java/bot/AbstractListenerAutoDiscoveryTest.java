@@ -38,13 +38,13 @@ public class AbstractListenerAutoDiscoveryTest {
     @Test
     void testAutoMethodDiscoveryReturnStringWorks() {
         AbstractListener listener = new TestListenerReturnString(bot);
-        Assertions.assertEquals(2, listener.commands.size());
+        Assertions.assertEquals(1, listener.commands.size());
     }
 
     @Test
     void testAutoMethodDiscoveryReturnVoidWorks() {
         AbstractListener listener = new TestListenerReturnVoid(bot);
-        Assertions.assertEquals(2, listener.commands.size());
+        Assertions.assertEquals(1, listener.commands.size());
     }
 
     @Test

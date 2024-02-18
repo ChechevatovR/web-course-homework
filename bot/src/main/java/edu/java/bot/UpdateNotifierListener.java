@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Description;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UpdateNotifierListener extends AbstractListener {
+public class UpdateNotifierListener extends AutoHelpListener {
     public UpdateNotifierListener(TelegramBot telegramBot) {
         super(telegramBot);
     }
