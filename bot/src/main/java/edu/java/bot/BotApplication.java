@@ -20,8 +20,4 @@ public class BotApplication {
         return new TelegramBot(config.apiToken());
     }
 
-    @Bean
-    public UpdateNotifierListener updateNotifierListener(TelegramBot telegramBot) {
-        return new UpdateNotifierListener(telegramBot);
-    }
 }
