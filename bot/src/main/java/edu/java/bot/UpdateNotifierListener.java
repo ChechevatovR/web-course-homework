@@ -4,8 +4,8 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.annotations.BotCommand;
 import org.springframework.context.annotation.Description;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
