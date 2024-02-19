@@ -2,6 +2,7 @@ package edu.java.scrapper.clients.stackoverflow.model.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.java.scrapper.clients.stackoverflow.model.Answer;
+import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -9,13 +10,10 @@ import java.util.List;
 public class AnswerResponse {
     @JsonProperty("answer_id")
     public long id;
-//    public String body;
-
     public List<CommentResponse> comments = List.of();
-
     @JsonProperty("creation_date")
     public OffsetDateTime creationDate;
-    @JsonProperty("lastActivityDate")
+    @JsonProperty("last_activity_date")
     public OffsetDateTime lastActivityDate;
     public String link;
     public UserResponse owner;
@@ -27,10 +25,9 @@ public class AnswerResponse {
     public Answer asModel() {
         return new Answer(
             id,
-            link,
+            URI.create(link),
             score,
             title,
-//            body,
             comments.stream().map(CommentResponse::asModel).toList(),
             creationDate,
             owner.asModel(),

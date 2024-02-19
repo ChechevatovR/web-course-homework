@@ -2,6 +2,7 @@ package edu.java.scrapper.clients.github.model.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.java.scrapper.clients.github.model.Issue;
+import java.net.URI;
 import java.time.OffsetDateTime;
 
 public record IssueResponse(
@@ -10,7 +11,6 @@ public record IssueResponse(
     String url,
     int number,
     String title,
-//    String body,
     UserResponse user,
     String state,
     boolean locked,
@@ -24,10 +24,9 @@ public record IssueResponse(
     public Issue asModel() {
         return new Issue(
             id,
-            url,
+            URI.create(url),
             number,
             title,
-//            body,
             user.asModel(),
             state,
             locked,

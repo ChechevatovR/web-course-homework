@@ -2,6 +2,7 @@ package edu.java.scrapper.clients.stackoverflow.model.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.java.scrapper.clients.stackoverflow.model.User;
+import java.net.URI;
 
 public record UserResponse(
     @JsonProperty("account_id")
@@ -14,6 +15,6 @@ public record UserResponse(
     long userId
     ) {
     public User asModel() {
-        return new User(userId, accountId, link, displayName, reputation);
+        return new User(userId, accountId, URI.create(link), displayName, reputation);
     }
 }

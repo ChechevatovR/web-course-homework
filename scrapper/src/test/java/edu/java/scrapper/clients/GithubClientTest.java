@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import java.io.IOException;
+import java.net.URI;
 import java.time.OffsetDateTime;
 
 @SpringBootTest
@@ -37,12 +38,12 @@ public class GithubClientTest extends AbstractClientTest {
     void testGetRepo() {
         Repository expected = new Repository(
             61722736,
-            "https://github.com/Kotlin/kotlinx.coroutines",
+            URI.create("https://github.com/Kotlin/kotlinx.coroutines"),
             "kotlinx.coroutines",
             "Library support for Kotlin coroutines ",
             new User(
                 1446536,
-                "https://github.com/Kotlin",
+                URI.create("https://github.com/Kotlin"),
                 "Kotlin"
             ),
             OffsetDateTime.parse("2024-02-16T14:43:33Z"),
@@ -57,12 +58,12 @@ public class GithubClientTest extends AbstractClientTest {
     void testGetIssue() {
         Issue expected = new Issue(
             2126739271,
-            "https://github.com/Kotlin/kotlinx.coroutines/issues/4040",
+            URI.create("https://github.com/Kotlin/kotlinx.coroutines/issues/4040"),
             4040,
             "Coroutines perform unnecessary thread switches",
             new User(
                 159518155,
-                "https://github.com/ListenableFuture",
+                URI.create("https://github.com/ListenableFuture"),
                 "ListenableFuture"
             ),
             "open",
@@ -79,12 +80,12 @@ public class GithubClientTest extends AbstractClientTest {
     void testGetPull() {
         PullRequest expected = new PullRequest(
             1719902946,
-            "https://github.com/Kotlin/kotlinx.coroutines/pull/4041",
+            URI.create("https://github.com/Kotlin/kotlinx.coroutines/pull/4041"),
             4041,
             "Function containing atomic operations should be private ",
             new User(
                 82594708,
-                "https://github.com/mvicsokolova",
+                URI.create("https://github.com/mvicsokolova"),
                 "mvicsokolova"
             ),
             "open",

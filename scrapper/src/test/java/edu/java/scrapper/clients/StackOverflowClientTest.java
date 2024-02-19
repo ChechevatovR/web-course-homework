@@ -6,6 +6,7 @@ import edu.java.scrapper.clients.stackoverflow.model.Comment;
 import edu.java.scrapper.clients.stackoverflow.model.Question;
 import edu.java.scrapper.clients.stackoverflow.model.User;
 import java.io.IOException;
+import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -36,20 +37,21 @@ public class StackOverflowClientTest extends AbstractClientTest {
         User a1010C1100 = new User(
             4965770,
             6403914,
-            "https://stackoverflow.com/users/4965770/a1010c1100",
+            URI.create("https://stackoverflow.com/users/4965770/a1010c1100"),
             "A1010C1100",
             13
         );
         User scottBoston = new User(
             6361531,
             7316008,
-            "https://stackoverflow.com/users/6361531/scott-boston",
+            URI.create("https://stackoverflow.com/users/6361531/scott-boston"),
             "Scott Boston",
             149773
         );
         Question expected = new Question(
             47824636,
-            "https://stackoverflow.com/questions/47824636/pandas-stacked-bar-chart-with-independent-unrelated-partitions-of-bars",
+            URI.create("https://stackoverflow.com/questions/47824636/pandas-stacked-bar-chart-with-independent" +
+                       "-unrelated-partitions-of-bars"),
             1,
             "Pandas- stacked bar chart with independent/unrelated partitions of bars",
             a1010C1100,
@@ -57,30 +59,31 @@ public class StackOverflowClientTest extends AbstractClientTest {
             List.of(
                 new Answer(
                     47825151,
-                    "https://stackoverflow.com/questions/47824636/pandas-stacked-bar-chart-with-independent-unrelated" +
-                    "-partitions-of-bars/47825151#47825151",
+                    URI.create("https://stackoverflow.com/questions/47824636/pandas-stacked-bar-chart-with-independent-unrelated" +
+                    "-partitions-of-bars/47825151#47825151"),
                     1,
                     "Pandas- stacked bar chart with independent/unrelated partitions of bars",
                     List.of(
                         new Comment(
                             82613297,
-                            "https://stackoverflow.com/questions/47824636/pandas-stacked-bar-chart-with-independent" +
-                            "-unrelated-partitions-of-bars/47825151#comment82613297_47825151",
+                            URI.create("https://stackoverflow.com/questions/47824636/pandas-stacked-bar-chart-with-independent" +
+                            "-unrelated-partitions-of-bars/47825151#comment82613297_47825151"),
                             0,
                             a1010C1100,
-                            null
+                            OffsetDateTime.parse("2017-12-15T03:35:01Z")
                         ),
                         new Comment(
                             82613303,
-                            "https://stackoverflow.com/questions/47824636/pandas-stacked-bar-chart-with-independent-unrelated-partitions-of-bars/47825151#comment82613303_47825151",
+                            URI.create("https://stackoverflow.com/questions/47824636/pandas-stacked-bar-chart-with" +
+                                       "-independent-unrelated-partitions-of-bars/47825151#comment82613303_47825151"),
                             0,
                             scottBoston,
-                            null
+                            OffsetDateTime.parse("2017-12-15T03:35:33Z")
                         )
                     ),
                     OffsetDateTime.parse("2017-12-15T02:54:45Z"),
                     scottBoston,
-                    null
+                    OffsetDateTime.parse("2017-12-15T02:54:45Z")
                 )
             ),
             OffsetDateTime.parse("2017-12-15T01:38:55Z"),

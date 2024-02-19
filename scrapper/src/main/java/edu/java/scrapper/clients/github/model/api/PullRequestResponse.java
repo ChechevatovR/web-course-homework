@@ -2,6 +2,7 @@ package edu.java.scrapper.clients.github.model.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.java.scrapper.clients.github.model.PullRequest;
+import java.net.URI;
 import java.time.OffsetDateTime;
 
 public record PullRequestResponse(
@@ -10,7 +11,6 @@ public record PullRequestResponse(
     String url,
     int number,
     String title,
-//    String body,
     UserResponse user,
     String state,
     boolean locked,
@@ -26,10 +26,9 @@ public record PullRequestResponse(
     public PullRequest asModel() {
         return new PullRequest(
             id,
-            url,
+            URI.create(url),
             number,
             title,
-//            body,
             user.asModel(),
             state,
             locked,

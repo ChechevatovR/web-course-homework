@@ -1,13 +1,13 @@
 package edu.java.scrapper.clients.github.model;
 
+import java.net.URI;
 import java.time.OffsetDateTime;
 
 public record PullRequest(
     long id,
-    String url,
+    URI uri,
     int number,
     String title,
-//    String body,
     User user,
     String state,
     boolean locked,

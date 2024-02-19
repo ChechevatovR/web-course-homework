@@ -2,6 +2,7 @@ package edu.java.scrapper.clients.github.model.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.java.scrapper.clients.github.model.Repository;
+import java.net.URI;
 import java.time.OffsetDateTime;
 
 public record RepositoryResponse(
@@ -21,7 +22,7 @@ public record RepositoryResponse(
     public Repository asModel() {
         return new Repository(
             id,
-            url,
+            URI.create(url),
             name,
             description,
             owner.asModel(),

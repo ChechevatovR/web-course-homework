@@ -1,13 +1,13 @@
 package edu.java.scrapper.clients.stackoverflow.model;
 
+import java.net.URI;
 import java.time.OffsetDateTime;
 
 // https://api.stackexchange.com/docs/types/comment
 public record Comment(
     long id,
-    String url,
+    URI uri,
     int score,
-//    String body,
     User owner,
     OffsetDateTime creationDate
 ) {
