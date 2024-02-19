@@ -5,6 +5,7 @@ import edu.java.scrapper.clients.stackoverflow.model.Answer;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 
 // https://api.stackexchange.com/docs/types/answer
 public class AnswerResponse {
@@ -23,12 +24,13 @@ public class AnswerResponse {
     public String title;
 
     public Answer asModel() {
+        List<CommentResponse> commentsSafe = Objects.requireNonNullElse(comments, List.of());
         return new Answer(
             id,
             URI.create(link),
             score,
             title,
-            comments.stream().map(CommentResponse::asModel).toList(),
+            commentsSafe.stream().map(CommentResponse::asModel).toList(),
             creationDate,
             owner.asModel(),
             lastActivityDate

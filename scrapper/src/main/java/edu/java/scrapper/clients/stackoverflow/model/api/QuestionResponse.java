@@ -5,6 +5,7 @@ import edu.java.scrapper.clients.stackoverflow.model.Question;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 
 public class QuestionResponse {
     @JsonProperty("accepted_answer_id")
@@ -25,6 +26,8 @@ public class QuestionResponse {
     public String title;
 
     public Question asModel() {
+        List<AnswerResponse> answersSafe = Objects.requireNonNullElse(answers, List.of());
+        List<CommentResponse> commentsSafe = Objects.requireNonNullElse(comments, List.of());
         return new Question(
             questionId,
             URI.create(link),
@@ -32,10 +35,10 @@ public class QuestionResponse {
             title,
             owner.asModel(),
             isAnswered,
-            answers.stream().map(AnswerResponse::asModel).toList(),
+            answersSafe.stream().map(AnswerResponse::asModel).toList(),
             creationDate,
             lastActivityDate,
-            comments.stream().map(CommentResponse::asModel).toList()
+            commentsSafe.stream().map(CommentResponse::asModel).toList()
         );
     }
 }
