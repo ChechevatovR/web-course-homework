@@ -165,6 +165,52 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.3.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-controller</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/api.json</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <apiPackage>edu.java.bot.controllers</apiPackage>
+                            <modelPackage>edu.java.bot.controllers.model</modelPackage>
+                            <configOptions>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-client-for-scrapper</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/../scrapper/src/main/resources/api.json</inputSpec>
+                            <generatorName>java</generatorName>
+                            <packageName>edu.java.bot.clients.common.openapi</packageName>
+                            <apiPackage>edu.java.bot.clients.scrapper</apiPackage>
+                            <modelPackage>edu.java.bot.clients.scrapper.model</modelPackage>
+                            <invokerPackage>edu.java.bot.clients.common.openapi.invoker</invokerPackage>
+                            <generateModelTests>false</generateModelTests>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateApiTests>false</generateApiTests>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <configOptions>
+                                <generateClientAsBean>true</generateClientAsBean>
+                                <library>webclient</library>
+                                <useJakartaEe>true</useJakartaEe>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
