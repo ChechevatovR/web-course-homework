@@ -203,7 +203,6 @@
                             <generateApiTests>false</generateApiTests>
                             <generateApiDocumentation>false</generateApiDocumentation>
                             <configOptions>
-                                <generateClientAsBean>true</generateClientAsBean>
                                 <library>webclient</library>
                                 <useJakartaEe>true</useJakartaEe>
                             </configOptions>

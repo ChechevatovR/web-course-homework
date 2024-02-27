@@ -1,14 +1,13 @@
 package edu.java.scrapper.controllers;
 
 import edu.java.scrapper.controllers.model.ApiErrorResponse;
+import java.util.Arrays;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.Arrays;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
