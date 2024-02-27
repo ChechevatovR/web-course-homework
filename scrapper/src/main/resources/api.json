@@ -25,7 +25,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Чат зарегистрирован"
+                        "description": "Чат уже был зарегистрирован"
+                    },
+                    "201": {
+                        "description": "Чат успешно зарегистрирован"
                     },
                     "400": {
                         "description": "Некорректные параметры запроса",
@@ -141,6 +144,16 @@
                 },
                 "responses": {
                     "200": {
+                        "description": "Ссылка уже была добавлена",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LinkResponse"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
                         "description": "Ссылка успешно добавлена",
                         "content": {
                             "application/json": {
