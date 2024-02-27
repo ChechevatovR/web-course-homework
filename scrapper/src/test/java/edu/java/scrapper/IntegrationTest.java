@@ -12,8 +12,8 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.DirectoryResourceAccessor;
-import org.apache.commons.io.output.NullWriter;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
@@ -29,9 +29,17 @@ public abstract class IntegrationTest {
             .withDatabaseName("scrapper")
             .withUsername("postgres")
             .withPassword("postgres");
-        POSTGRES.start();
+    }
 
+    @BeforeAll
+    static void beforeAll() {
+        POSTGRES.start();
         runMigrations(POSTGRES);
+    }
+
+    @AfterAll
+    static void afterAll() {
+        POSTGRES.stop();
     }
 
     private static void runMigrations(JdbcDatabaseContainer<?> c) {
@@ -44,7 +52,7 @@ public abstract class IntegrationTest {
                 new DirectoryResourceAccessor(Path.of("..", "migrations")),
                 database
             );
-            liquibase.update(new Contexts(), NullWriter.INSTANCE);
+            liquibase.update(new Contexts());
         } catch (SQLException | LiquibaseException | FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -55,10 +63,5 @@ public abstract class IntegrationTest {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
-    }
-
-    @Test
-    void runMigrations() {
-
     }
 }
