@@ -11,6 +11,7 @@
     "paths": {
         "/updates": {
             "post": {
+                "tags": [ "bot" ],
                 "summary": "Отправить обновление",
                 "requestBody": {
                     "content": {

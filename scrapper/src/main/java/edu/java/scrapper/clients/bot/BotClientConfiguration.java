@@ -11,9 +11,9 @@ public class BotClientConfiguration {
     public String baseUrl;
 
     @Bean
-    public DefaultApi botClient() {
+    public BotApi botClient() {
         ApiClient apiClient = new ApiClient();
         apiClient.setBasePath(baseUrl);
-        return new DefaultApi(apiClient);
+        return new BotApi(apiClient);
     }
 }

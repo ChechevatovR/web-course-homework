@@ -11,9 +11,9 @@ public class ScrapperClientConfiguration {
     public String baseUrl;
 
     @Bean
-    DefaultApi scrapperClient() {
+    ScrapperApi scrapperClient() {
         ApiClient apiClient = new ApiClient();
         apiClient.setBasePath(baseUrl);
-        return new DefaultApi(apiClient);
+        return new ScrapperApi(apiClient);
     }
 }
