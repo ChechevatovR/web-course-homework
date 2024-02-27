@@ -63,7 +63,11 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "required": [
+                    "code",
+                    "description"
+                ]
             },
             "LinkUpdate": {
                 "type": "object",
@@ -86,7 +90,11 @@
                             "format": "int64"
                         }
                     }
-                }
+                },
+                "required": [
+                    "url",
+                    "tgChatIds"
+                ]
             }
         }
     }
