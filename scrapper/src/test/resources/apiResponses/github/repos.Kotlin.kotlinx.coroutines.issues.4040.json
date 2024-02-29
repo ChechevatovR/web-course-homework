@@ -1,0 +1,73 @@
+{
+    "url": "https://api.github.com/repos/Kotlin/kotlinx.coroutines/issues/4040",
+    "repository_url": "https://api.github.com/repos/Kotlin/kotlinx.coroutines",
+    "labels_url": "https://api.github.com/repos/Kotlin/kotlinx.coroutines/issues/4040/labels{/name}",
+    "comments_url": "https://api.github.com/repos/Kotlin/kotlinx.coroutines/issues/4040/comments",
+    "events_url": "https://api.github.com/repos/Kotlin/kotlinx.coroutines/issues/4040/events",
+    "html_url": "https://github.com/Kotlin/kotlinx.coroutines/issues/4040",
+    "id": 2126739271,
+    "node_id": "I_kwDOA63QcM5-w3dH",
+    "number": 4040,
+    "title": "Coroutines perform unnecessary thread switches",
+    "user": {
+        "login": "ListenableFuture",
+        "id": 159518155,
+        "node_id": "U_kgDOCYINyw",
+        "avatar_url": "https://avatars.githubusercontent.com/u/159518155?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ListenableFuture",
+        "html_url": "https://github.com/ListenableFuture",
+        "followers_url": "https://api.github.com/users/ListenableFuture/followers",
+        "following_url": "https://api.github.com/users/ListenableFuture/following{/other_user}",
+        "gists_url": "https://api.github.com/users/ListenableFuture/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/ListenableFuture/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/ListenableFuture/subscriptions",
+        "organizations_url": "https://api.github.com/users/ListenableFuture/orgs",
+        "repos_url": "https://api.github.com/users/ListenableFuture/repos",
+        "events_url": "https://api.github.com/users/ListenableFuture/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/ListenableFuture/received_events",
+        "type": "User",
+        "site_admin": false
+    },
+    "labels": [
+        {
+            "id": 864692605,
+            "node_id": "MDU6TGFiZWw4NjQ2OTI2MDU=",
+            "url": "https://api.github.com/repos/Kotlin/kotlinx.coroutines/labels/waiting%20for%20clarification",
+            "name": "waiting for clarification",
+            "color": "c98842",
+            "default": false,
+            "description": ""
+        }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 5,
+    "created_at": "2024-02-09T09:11:17Z",
+    "updated_at": "2024-02-16T11:04:57Z",
+    "closed_at": null,
+    "author_association": "NONE",
+    "active_lock_reason": null,
+    "body": "**Tl;dr - Coroutines seem to have a trade-off between performing extra thread switches versus using `Dispatchers.Unconfined`, and there doesn’t appear to be an ideal solution**\r\n\r\nWe’re creating a set of `CoroutineScopes` for our Android application, which may be tied to the lifecycles of various subcomponents, and we’d like to ensure they run asynchronous code efficiently.  For reference, the dispatchers are created from our existing Java executors using `ExecutorService.asCoroutineDispatcher()`, since the executors are already used elsewhere in the application.\r\n\r\n### Issue 1 - Unnecessary thread switches\r\n\r\nSuppose we have a `mainCoroutineScope` which uses the application’s main thread:\r\n\r\n```\r\n// Thread A\r\nmainCoroutineScope.launch {\r\n  // Main thread\r\n  suspendBackground()\r\n  // Main thread\r\n  suspendBackground()\r\n  // Main thread\r\n}\r\n```\r\n\r\nIn the example above, the `CoroutineScope` will repeatedly switch between `Main Thread` and `Background Thread`, even if the code blocks running on the main thread are empty.  This enqueues unnecessary work on the main thread, which is a concern in Android, since the main thread is used to render UI and needs to stay responsive.  The `CoroutineScope` will also take longer to complete its tasks, since it needs to wait for the main-threaded tasks to complete, and the main thread is often busy performing other work.\r\n\r\n### Issue 2 - Reentrancy\r\n\r\nTo avoid the unnecessary thread switches above, we can use inline dispatch with `Dispatchers.Unconfined`.  This allows the example above to have the following ordering, which no other scope can do:\r\n```\r\nThread A -> suspendBackground() -> inline code (background thread) -> suspendBackground() -> inline code (background thread)\r\n```\r\n\r\nIn general, `Dispatchers.Unconfined` appears to be the only way for a `CoroutineScope` to allow full control over its thread behavior.  This indicates our scopes should use `Dispatchers.Unconfined` by default, however this is discouraged by the [Kotlin docs](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#unconfined-vs-confined-dispatcher), and introduces concerns with reentrancy.\r\n\r\n### Comparison with Java\r\n\r\nIn Java, `directExecutor()` is the equivalent of Kotlin’s `Dispatchers.Unconfined`, and with Java’s `Futures`, the user is forced to choose an executor at each call.  However in Kotlin, `Unconfined` implicitly runs the code inline, so the user must actively choose when to switch executors, otherwise it runs everything like `directExecutor()` by default.  To make `Unconfined` scopes more explicit like Java, we would need a way to force users to choose a dispatcher for each code block.\r\n\r\n### Summary\r\n\r\nThere seems to be a trade-off between extra thread switches versus reentrancy issues, and there doesn’t appear to be an ideal solution.  Kotlin provides everything we need to control thread switching, but we’d need to default all our scopes to `Unconfined`, and users would need to be fairly experienced to ensure all their code is safely dispatched.  I’m wondering the Kotlin team’s perspective of this, and what they would recommend.  In particular:\r\n\r\n- Are there any optimizations the language or compiler can do to avoid unnecessary thread switches?\r\n- Would you recommend `Unconfined` as the default for `CoroutineScopes` tied to the lifecycle of subcomponents? Otherwise, is there a way to efficiently call suspending code while avoiding the dangers of inline execution?",
+    "closed_by": null,
+    "reactions": {
+        "url": "https://api.github.com/repos/Kotlin/kotlinx.coroutines/issues/4040/reactions",
+        "total_count": 0,
+        "+1": 0,
+        "-1": 0,
+        "laugh": 0,
+        "hooray": 0,
+        "confused": 0,
+        "heart": 0,
+        "rocket": 0,
+        "eyes": 0
+    },
+    "timeline_url": "https://api.github.com/repos/Kotlin/kotlinx.coroutines/issues/4040/timeline",
+    "performed_via_github_app": null,
+    "state_reason": null
+}

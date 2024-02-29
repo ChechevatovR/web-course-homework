@@ -1,0 +1,86 @@
+{
+    "items": [
+        {
+            "answers": [
+                {
+                    "comments": [
+                        {
+                            "owner": {
+                                "account_id": 6403914,
+                                "reputation": 13,
+                                "user_id": 4965770,
+                                "user_type": "registered",
+                                "profile_image": "https://www.gravatar.com/avatar/f130b8024f3dbef79e82a3ded3ffe751?s=256&d=identicon&r=PG&f=y&so-version=2",
+                                "display_name": "A1010C1100",
+                                "link": "https://stackoverflow.com/users/4965770/a1010c1100"
+                            },
+                            "score": 0,
+                            "creation_date": 1513308901,
+                            "post_id": 47825151,
+                            "comment_id": 82613297,
+                            "link": "https://stackoverflow.com/questions/47824636/pandas-stacked-bar-chart-with-independent-unrelated-partitions-of-bars/47825151#comment82613297_47825151",
+                            "body": "Awesome. Thank you, Scott. Exactly what I was looking for! If I didn&#39;t specify a color, matplotlib would choose them automatically, right?"
+                        },
+                        {
+                            "owner": {
+                                "account_id": 7316008,
+                                "reputation": 149773,
+                                "user_id": 6361531,
+                                "user_type": "registered",
+                                "accept_rate": 80,
+                                "profile_image": "https://i.stack.imgur.com/BRRGS.png?s=256&g=1",
+                                "display_name": "Scott Boston",
+                                "link": "https://stackoverflow.com/users/6361531/scott-boston"
+                            },
+                            "score": 0,
+                            "creation_date": 1513308933,
+                            "post_id": 47825151,
+                            "comment_id": 82613303,
+                            "link": "https://stackoverflow.com/questions/47824636/pandas-stacked-bar-chart-with-independent-unrelated-partitions-of-bars/47825151#comment82613303_47825151",
+                            "body": "Yes, it would use the default colormap. You&#39;re welcome.  Happy coding!"
+                        }
+                    ],
+                    "owner": {
+                        "account_id": 7316008,
+                        "reputation": 149773,
+                        "user_id": 6361531,
+                        "user_type": "registered",
+                        "accept_rate": 80,
+                        "profile_image": "https://i.stack.imgur.com/BRRGS.png?s=256&g=1",
+                        "display_name": "Scott Boston",
+                        "link": "https://stackoverflow.com/users/6361531/scott-boston"
+                    },
+                    "score": 1,
+                    "last_activity_date": 1513306485,
+                    "creation_date": 1513306485,
+                    "answer_id": 47825151,
+                    "question_id": 47824636,
+                    "link": "https://stackoverflow.com/questions/47824636/pandas-stacked-bar-chart-with-independent-unrelated-partitions-of-bars/47825151#47825151",
+                    "title": "Pandas- stacked bar chart with independent/unrelated partitions of bars",
+                    "body": "<p>Sure, let's try this code:</p>\n\n<pre><code>import pandas as pd\nimport matplotlib.pyplot as plt\n\ndf = pd.DataFrame({'box':[1]*3+[2]*4,'color':['red','blue','yellow','orange','green','purple','black'],\n                  'Value':[3,5,8,2,6,9,10]})\ndf\n</code></pre>\n\n<p>Output:</p>\n\n<pre><code>   Value  box   color\n0      3    1     red\n1      5    1    blue\n2      8    1  yellow\n3      2    2  orange\n4      6    2   green\n5      9    2  purple\n6     10    2   black\n</code></pre>\n\n<p>Now, let's reshape and plot:</p>\n\n<pre><code>df.set_index(['box','color']).unstack()['Value']\\\n  .plot(kind='bar', stacked=True, color=df.color.sort_values().tolist(), figsize=(15,8))\n</code></pre>\n\n<p>Output:\n<a href=\"https://i.stack.imgur.com/fKf5a.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/fKf5a.png\" alt=\"enter image description here\"></a></p>\n"
+                }
+            ],
+            "owner": {
+                "account_id": 6403914,
+                "reputation": 13,
+                "user_id": 4965770,
+                "user_type": "registered",
+                "profile_image": "https://www.gravatar.com/avatar/f130b8024f3dbef79e82a3ded3ffe751?s=256&d=identicon&r=PG&f=y&so-version=2",
+                "display_name": "A1010C1100",
+                "link": "https://stackoverflow.com/users/4965770/a1010c1100"
+            },
+            "is_answered": true,
+            "accepted_answer_id": 47825151,
+            "score": 1,
+            "last_activity_date": 1513306485,
+            "creation_date": 1513301935,
+            "question_id": 47824636,
+            "link": "https://stackoverflow.com/questions/47824636/pandas-stacked-bar-chart-with-independent-unrelated-partitions-of-bars",
+            "title": "Pandas- stacked bar chart with independent/unrelated partitions of bars",
+            "body": "<p>I would like to create a stacked bar chart, where the partitions of the bars are independent from another. For example, let's say I have 2 boxes of balls. (Making up numbers...) Box 1 has 3 red, 5 blue, and 8 yellow balls. Box 2 has 2 orange, 6 green, 9 purple, and 10 black balls.</p>\n\n<p>Now, I would like to create a stacked bar chart with a bar for each box, and within each bar, I can show the number of balls for a particular color. The colors of the balls are different depending on the box, so I would want to label these groupings within the bars.</p>\n\n<p>In my particular case, I have 5 bins, and within each bin, there are between 8-12 (different) groupings. </p>\n\n<p>This may not seem like the best type of chart, so do you have another chart/plot type that you would recommend? </p>\n\n<p>Thanks! </p>\n"
+        }
+    ],
+    "has_more": false,
+    "quota_max": 300,
+    "quota_remaining": 261
+}

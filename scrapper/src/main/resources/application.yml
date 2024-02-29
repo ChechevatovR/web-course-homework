@@ -3,6 +3,10 @@ app:
     enable: true
     interval: 10s
     force-check-delay: 10s
+  clients:
+    stackoverflow:
+      base-url: "https://api.stackexchange.com/2.3"
+      filter: "!BByLnZ1QNx_zLScMFi.8Pz6HIwMox1_ImiqaT5V1oBML_rwYaA-OOGYnkF0NLH*5-jYC--cO4ynL"
 
 spring:
   application:
