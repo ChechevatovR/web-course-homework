@@ -1,9 +1,13 @@
 create table public.links
 (
-    id         serial
+    id          serial
         constraint links_pk
-        primary key,
-    last_check timestamp with time zone not null,
-    site       varchar                  not null,
-    url        text                     not null
+            primary key,
+    last_check  timestamp with time zone not null,
+    last_update timestamp with time zone not null,
+    site        varchar                  not null,
+    url         text                     not null
 );
+
+create index links_last_check_index
+    on links (last_check);
