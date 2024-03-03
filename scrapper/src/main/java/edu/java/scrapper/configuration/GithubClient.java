@@ -1,13 +1,13 @@
 package edu.java.scrapper.configuration;
 
 public class GithubClient {
-    public String baseUrl = "https://api.github.com/";
+    String baseUrl = "https://api.github.com/";
 
     public String getBaseUrl() {
         return baseUrl;
     }
 
-    public void setBaseUrl(String baseUrl) {
+    void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
     }
 }

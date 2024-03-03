@@ -11,16 +11,16 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public class ApplicationConfig {
     @NotEmpty
-    public String telegramToken;
+    String telegramToken;
 
     @NotNull
-    public Clients clients = new Clients();
+    Clients clients = new Clients();
 
     public String getTelegramToken() {
         return telegramToken;
     }
 
-    public void setTelegramToken(String telegramToken) {
+    void setTelegramToken(String telegramToken) {
         this.telegramToken = telegramToken;
     }
 
@@ -28,7 +28,7 @@ public class ApplicationConfig {
         return clients;
     }
 
-    public void setClients(Clients clients) {
+    void setClients(Clients clients) {
         this.clients = clients;
     }
 }

@@ -10,16 +10,16 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public class ApplicationConfig {
     @NotNull
-    public Scheduler scheduler;
+    Scheduler scheduler;
 
     @NotNull
-    public Clients clients = new Clients();
+    Clients clients = new Clients();
 
     public Scheduler getScheduler() {
         return scheduler;
     }
 
-    public void setScheduler(Scheduler scheduler) {
+    void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
     }
 
@@ -27,7 +27,7 @@ public class ApplicationConfig {
         return clients;
     }
 
-    public void setClients(Clients clients) {
+    void setClients(Clients clients) {
         this.clients = clients;
     }
 }
