@@ -2,24 +2,24 @@ package edu.java.scrapper.configuration;
 
 import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@Configuration
+@Component
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public class ApplicationConfig {
     @NotNull
-    public Scheduler scheduler;
+    Scheduler scheduler;
 
     @NotNull
-    public Clients clients = new Clients();
+    Clients clients = new Clients();
 
     public Scheduler getScheduler() {
         return scheduler;
     }
 
-    public void setScheduler(Scheduler scheduler) {
+    void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
     }
 
@@ -27,7 +27,7 @@ public class ApplicationConfig {
         return clients;
     }
 
-    public void setClients(Clients clients) {
+    void setClients(Clients clients) {
         this.clients = clients;
     }
 }

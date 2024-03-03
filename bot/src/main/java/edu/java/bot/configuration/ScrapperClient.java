@@ -1,7 +1,7 @@
-package edu.java.scrapper.configuration;
+package edu.java.bot.configuration;
 
-public class GithubClient {
-    String baseUrl = "https://api.github.com/";
+public class ScrapperClient {
+    String baseUrl = "http://localhost:8080/";
 
     public String getBaseUrl() {
         return baseUrl;
