@@ -11,3 +11,6 @@ create table public.links
 
 create index links_last_check_index
     on links (last_check);
+
+create unique index links_url_uindex
+    on public.links (url);
