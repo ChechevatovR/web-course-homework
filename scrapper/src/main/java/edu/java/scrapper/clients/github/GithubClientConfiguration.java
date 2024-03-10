@@ -14,6 +14,10 @@ public class GithubClientConfiguration {
 
     @Bean
     public GithubApi githubApi() {
+        return githubApi(baseUrl);
+    }
+
+    public GithubApi githubApi(String baseUrl) {
         RestClient restClient = RestClient.builder()
             .baseUrl(baseUrl)
             .defaultHeader("X-GitHub-Api-Version", "2022-11-28")

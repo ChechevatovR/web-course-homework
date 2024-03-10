@@ -1,6 +1,7 @@
 package edu.java.scrapper.clients;
 
 
+import edu.java.scrapper.clients.github.GithubClientConfiguration;
 import edu.java.scrapper.clients.github.model.*;
 import edu.java.scrapper.clients.github.GithubClient;
 import org.junit.jupiter.api.Assertions;
@@ -13,12 +14,14 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.OffsetDateTime;
 
-@SpringBootTest
-@TestPropertySource(properties = "app.clients.github.base-url=http://localhost:8089")
 public class GithubClientTest extends AbstractClientTest {
 
-    @Autowired
     public GithubClient client;
+
+    {
+        GithubClientConfiguration configuration = new GithubClientConfiguration();
+        client = configuration.githubClient(configuration.githubApi("http://localhost:8089"));
+    }
 
     @Override
     public String resourceDirectoryName() {
