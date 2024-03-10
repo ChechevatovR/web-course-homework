@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.sql.DataSource;
 import liquibase.Contexts;
 import liquibase.Liquibase;
 import liquibase.database.Database;
@@ -14,6 +15,8 @@ import liquibase.exception.LiquibaseException;
 import liquibase.resource.DirectoryResourceAccessor;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
@@ -23,6 +26,11 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public abstract class IntegrationTest {
     public static PostgreSQLContainer<?> POSTGRES;
+    public static Connection connection;
+    public static JdbcConnection jdbcConnection;
+    public static DataSource dataSource;
+    public static JdbcTemplate jdbcTemplate;
+
 
     static {
         POSTGRES = new PostgreSQLContainer<>("postgres:16")
@@ -32,8 +40,12 @@ public abstract class IntegrationTest {
     }
 
     @BeforeAll
-    static void beforeAll() {
+    static void beforeAll() throws SQLException {
         POSTGRES.start();
+        connection = DriverManager.getConnection(POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword());
+        jdbcConnection = new JdbcConnection(connection);
+        dataSource = new DriverManagerDataSource(POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword());
+        jdbcTemplate = new JdbcTemplate(dataSource);
         runMigrations(POSTGRES);
     }
 
@@ -44,8 +56,6 @@ public abstract class IntegrationTest {
 
     private static void runMigrations(JdbcDatabaseContainer<?> c) {
         try {
-            Connection connection = DriverManager.getConnection(c.getJdbcUrl(), c.getUsername(), c.getPassword());
-            JdbcConnection jdbcConnection = new JdbcConnection(connection);
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcConnection);
             Liquibase liquibase = new Liquibase(
                 "liquibase.xml",
@@ -53,7 +63,7 @@ public abstract class IntegrationTest {
                 database
             );
             liquibase.update(new Contexts());
-        } catch (SQLException | LiquibaseException | FileNotFoundException e) {
+        } catch (LiquibaseException | FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
