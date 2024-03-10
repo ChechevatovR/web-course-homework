@@ -8,6 +8,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpStatusCodeException;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
@@ -18,6 +19,9 @@ public class RestExceptionHandler {
         if (e instanceof ErrorResponse errorResponse) {
             fillResponseFromErrorResponse(response, errorResponse);
         }
+        if (e instanceof HttpStatusCodeException httpStatusCodeException) {
+            fillResponseFromHttpStatusCodeException(response, httpStatusCodeException);
+        }
         fillResponseFromException(response, e);
 
         HttpStatus responseCode;
@@ -27,6 +31,12 @@ public class RestExceptionHandler {
             responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity<>(response, responseCode);
+    }
+
+    private void fillResponseFromHttpStatusCodeException(ApiErrorResponse response, HttpStatusCodeException e) {
+        if (response.getCode() == null) {
+            response.setCode(Integer.toString(e.getStatusCode().value()));
+        }
     }
 
     public static void fillResponseFromErrorResponse(ApiErrorResponse response, ErrorResponse e) {
