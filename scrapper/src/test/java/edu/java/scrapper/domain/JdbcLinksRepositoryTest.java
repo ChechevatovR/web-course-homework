@@ -20,8 +20,8 @@ public class JdbcLinksRepositoryTest extends IntegrationTest {
         jdbcTemplate.execute("TRUNCATE TABLE links, tracking");
         jdbcTemplate.execute(
             "INSERT INTO links VALUES " +
-            "(1, '2024-03-10 13:00:00Z', '2024-03-10 12:00:00Z', 'GITHUB', 'https://github.com/Kotlin/kotlinx.coroutines'), " +
-            "(2, '2024-03-10 12:00:00Z', '2024-03-10 12:00:00Z', 'STACKOVERFLOW', 'https://stackoverflow.com/questions/47824636')"
+            "(1, '2024-03-10 13:00:00Z', '2024-03-10 12:00:00Z', 'https://github.com/Kotlin/kotlinx.coroutines'), " +
+            "(2, '2024-03-10 12:00:00Z', '2024-03-10 12:00:00Z', 'https://stackoverflow.com/questions/47824636')"
         );
         jdbcTemplate.execute("ALTER SEQUENCE links_id_seq RESTART WITH 3");
     }

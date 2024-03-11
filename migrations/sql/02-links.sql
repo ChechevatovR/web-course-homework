@@ -5,7 +5,6 @@ create table public.links
             primary key,
     last_check  timestamp with time zone not null,
     last_update timestamp with time zone not null,
-    site        varchar                  not null,
     url         text                     not null
 );
 

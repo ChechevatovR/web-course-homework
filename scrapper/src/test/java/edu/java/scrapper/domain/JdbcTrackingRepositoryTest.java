@@ -18,9 +18,9 @@ public class JdbcTrackingRepositoryTest extends IntegrationTest {
         jdbcTemplate.execute("INSERT INTO chats VALUES (1, 11), (2, 22), (3, 33)");
         jdbcTemplate.execute(
             "INSERT INTO links VALUES " +
-            "(1, '2024-03-10 12:00:00', '2024-03-10 12:00:00', 'GITHUB', 'https://github.com/Kotlin/kotlinx" +
+            "(1, '2024-03-10 12:00:00', '2024-03-10 12:00:00', 'https://github.com/Kotlin/kotlinx" +
             ".coroutines'), " +
-            "(2, '2024-03-10 12:00:00', '2024-03-10 12:00:00', 'STACKOVERFLOW', 'https://stackoverflow" +
+            "(2, '2024-03-10 12:00:00', '2024-03-10 12:00:00', 'https://stackoverflow" +
             ".com/questions/47824636')"
         );
         jdbcTemplate.execute("INSERT INTO tracking VALUES (1, 1), (2, 2), (1, 2)");
