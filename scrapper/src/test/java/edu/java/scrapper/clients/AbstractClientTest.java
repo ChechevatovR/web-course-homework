@@ -9,8 +9,11 @@ import java.nio.file.Path;
 import org.junit.Rule;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.http.HttpHeaders;
 
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 public abstract class AbstractClientTest {
     public static final Path TEST_RESOURCES = Path.of("src", "test", "resources");
     public static final int PORT = 8089;
