@@ -25,10 +25,10 @@
                     }
                 ],
                 "responses": {
-                    "200": {
+                    "202": {
                         "description": "Чат уже был зарегистрирован"
                     },
-                    "201": {
+                    "200": {
                         "description": "Чат успешно зарегистрирован"
                     },
                     "400": {
@@ -72,7 +72,7 @@
                         }
                     },
                     "404": {
-                        "description": "Чат не существует",
+                        "description": "Чат не найден",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -119,6 +119,16 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Чат не найден",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiErrorResponse"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -147,7 +157,7 @@
                     "required": true
                 },
                 "responses": {
-                    "200": {
+                    "202": {
                         "description": "Ссылка уже была добавлена",
                         "content": {
                             "application/json": {
@@ -157,7 +167,7 @@
                             }
                         }
                     },
-                    "201": {
+                    "200": {
                         "description": "Ссылка успешно добавлена",
                         "content": {
                             "application/json": {
@@ -169,6 +179,16 @@
                     },
                     "400": {
                         "description": "Некорректные параметры запроса",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Чат не найден",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -214,6 +234,9 @@
                             }
                         }
                     },
+                    "202": {
+                        "description": "Ссылка не отслеживалась в данном чате"
+                    },
                     "400": {
                         "description": "Некорректные параметры запроса",
                         "content": {
@@ -225,7 +248,7 @@
                         }
                     },
                     "404": {
-                        "description": "Ссылка не найдена",
+                        "description": "Ссылка или чат не найдены",
                         "content": {
                             "application/json": {
                                 "schema": {
