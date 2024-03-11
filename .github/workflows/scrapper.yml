@@ -36,6 +36,7 @@ jobs:
           min-coverage-changed-files: 30
           title: Code Coverage
           update-comment: true
+          fail-emoji: 🍅
 
   checkstyle:
     name: checkstyle

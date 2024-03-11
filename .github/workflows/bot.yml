@@ -13,7 +13,7 @@ jobs:
     name: Build
     permissions:
       packages: write
-      pull-requests: write 
+      pull-requests: write
 
     steps:
       - uses: actions/checkout@v4
@@ -36,6 +36,7 @@ jobs:
           min-coverage-changed-files: 30
           title: Code Coverage
           update-comment: true
+          fail-emoji: 🍅
 
   checkstyle:
     name: checkstyle
