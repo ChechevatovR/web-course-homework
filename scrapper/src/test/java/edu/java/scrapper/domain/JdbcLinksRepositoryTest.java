@@ -17,7 +17,7 @@ public class JdbcLinksRepositoryTest extends IntegrationTest {
 
     @BeforeEach
     void setUp() {
-        jdbcTemplate.execute("TRUNCATE TABLE links, tracking");
+        jdbcTemplate.execute("TRUNCATE TABLE links, tracking, links_github");
         jdbcTemplate.execute(
             "INSERT INTO links VALUES " +
             "(1, '2024-03-10 13:00:00Z', '2024-03-10 12:00:00Z', 'https://github.com/Kotlin/kotlinx.coroutines'), " +

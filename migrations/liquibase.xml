@@ -10,4 +10,5 @@
     <include file="sql/01-chats.sql"/>
     <include file="sql/02-links.sql"/>
     <include file="sql/03-tracking.sql"/>
+    <include file="sql/04-links-github.sql"/>
 </databaseChangeLog>

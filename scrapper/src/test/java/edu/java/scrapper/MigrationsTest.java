@@ -16,6 +16,6 @@ public class MigrationsTest extends IntegrationTest {
         );
         Assertions.assertTrue(resultSet.next());
         int tablesInDb = resultSet.getInt(1);
-        Assertions.assertEquals(5, tablesInDb);
+        Assertions.assertEquals(6, tablesInDb);
     }
 }
