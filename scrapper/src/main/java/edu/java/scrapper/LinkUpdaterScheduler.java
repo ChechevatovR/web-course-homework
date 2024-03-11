@@ -19,21 +19,30 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-@Component @Log4j2 public class LinkUpdaterScheduler {
+@Component
+@Log4j2
+public class LinkUpdaterScheduler {
 
-    @Autowired List<LinkUpdateChecker> checkers;
+    @Autowired
+    private List<LinkUpdateChecker> checkers;
 
-    @Autowired LinksRepository linksRepository;
+    @Autowired
+    private LinksRepository linksRepository;
 
-    @Autowired TrackingRepository trackingRepository;
+    @Autowired
+    private TrackingRepository trackingRepository;
 
-    @Autowired ChatsRepository chatsRepository;
+    @Autowired
+    private ChatsRepository chatsRepository;
 
-    @Autowired BotApi botClient;
+    @Autowired
+    private BotApi botClient;
 
-    @Value("#{@applicationConfig.scheduler.interval}") Duration checkInterval;
+    @Value("#{@applicationConfig.scheduler.interval}")
+    private Duration checkInterval;
 
-    @Scheduled(fixedDelayString = "#{@applicationConfig.scheduler.interval.toMillis()}") void update() {
+    @Scheduled(fixedDelayString = "#{@applicationConfig.scheduler.interval.toMillis()}")
+    void update() {
         log.trace("Links update start");
         Collection<Link> links = linksRepository.findCheckedBefore(checkInterval);
         for (Link link : links) {
