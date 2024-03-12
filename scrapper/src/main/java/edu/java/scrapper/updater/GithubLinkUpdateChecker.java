@@ -24,7 +24,7 @@ public class GithubLinkUpdateChecker implements LinkUpdateChecker {
             return false;
         }
         try {
-            new GithubLink(link);
+            GithubLink.checkUrlSupported(link.getUrl());
             return true;
         } catch (UnsupportedLink e) {
             return false;
@@ -33,9 +33,11 @@ public class GithubLinkUpdateChecker implements LinkUpdateChecker {
 
     @Override
     public boolean isUpdated(Link l) {
-        GithubLink link = new GithubLink(l);
-        Repository repository = githubClient.getRepository(link.getOwner(), link.getRepo());
+        Repository repository = githubClient.getRepository(
+            GithubLink.getOwner(l.getUrl()),
+            GithubLink.getRepo(l.getUrl())
+        );
         OffsetDateTime updatedAt = repository.updatedAt();
-        return link.getLastUpdate().isBefore(updatedAt);
+        return l.getLastUpdate().isBefore(updatedAt);
     }
 }

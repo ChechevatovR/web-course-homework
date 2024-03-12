@@ -6,10 +6,7 @@ import java.time.OffsetDateTime;
 
 public class GithubLink extends Link {
     public static final String REPOSITORY_PATH_NOT_FOUND = "Repository path not found";
-    private final String owner;
-    private final String repo;
 
-    @SuppressWarnings("MagicNumber")
     public GithubLink(
         Integer id,
         URI url,
@@ -17,7 +14,20 @@ public class GithubLink extends Link {
         OffsetDateTime lastUpdate
     ) {
         super(id, url, lastCheck, lastUpdate);
-        if (getSite() != Site.GITHUB) {
+        checkUrlSupported(url);
+    }
+
+    public String getOwner() {
+        return getOwner(url);
+    }
+
+    public String getRepo() {
+        return getRepo(url);
+    }
+
+    @SuppressWarnings("MagicNumber")
+    public static void checkUrlSupported(final URI url) {
+        if (!Site.GITHUB.host.equals(url.getHost())) {
             throw new UnsupportedLink("Not a Github link");
         }
         String path = url.getPath();
@@ -28,19 +38,13 @@ public class GithubLink extends Link {
         if (splitted.length != 3 || !splitted[0].isEmpty()) {
             throw new UnsupportedLink(REPOSITORY_PATH_NOT_FOUND);
         }
-        owner = splitted[1];
-        repo = splitted[2];
     }
 
-    public GithubLink(Link link) {
-        this(link.getId(), link.getUrl(), link.getLastCheck(), link.getLastUpdate());
+    public static String getOwner(URI url) {
+        return url.getPath().split("/")[1];
     }
 
-    public String getOwner() {
-        return owner;
-    }
-
-    public String getRepo() {
-        return repo;
+    public static String getRepo(URI url) {
+        return url.getPath().split("/")[2];
     }
 }
