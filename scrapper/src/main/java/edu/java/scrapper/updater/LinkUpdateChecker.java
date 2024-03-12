@@ -5,5 +5,5 @@ import edu.java.scrapper.domain.model.Link;
 public interface LinkUpdateChecker {
     boolean isLinkSupported(Link link);
 
-    boolean isUpdated(Link link);
+    String isUpdated(Link link);
 }

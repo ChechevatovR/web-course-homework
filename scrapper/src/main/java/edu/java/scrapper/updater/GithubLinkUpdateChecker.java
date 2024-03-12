@@ -36,7 +36,7 @@ public class GithubLinkUpdateChecker implements LinkUpdateChecker {
     }
 
     @Override
-    public boolean isUpdated(Link l) {
+    public String isUpdated(Link l) {
         GithubLink link = linksGithubRepository.findById(l.getId());
         String owner = link.getOwner();
         String repo = link.getRepo();
@@ -44,20 +44,29 @@ public class GithubLinkUpdateChecker implements LinkUpdateChecker {
             owner,
             repo
         );
-        Optional<Integer> latestIssue = githubClient.getIssuesForRepository(owner, repo).stream()
+        int latestIssue = githubClient.getIssuesForRepository(owner, repo).stream()
             .map(Issue::number)
-            .max(Integer::compareTo);
-        Optional<Integer> latestPR = githubClient.getPullsForRepository(owner, repo).stream()
+            .max(Integer::compareTo)
+            .orElse(-1);
+        int latestPR = githubClient.getPullsForRepository(owner, repo).stream()
             .map(PullRequest::number)
-            .max(Integer::compareTo);
+            .max(Integer::compareTo)
+            .orElse(-1);
 
-        if (latestIssue.isPresent() && latestIssue.get() > link.getLatestIssueNumber()) {
-            return true;
+        String updateDescription = null;
+        if (latestIssue > link.getLatestIssueNumber()) {
+            updateDescription = "New Issue №" + latestIssue;
+        } else if (latestPR > link.getLatestPRNumber()) {
+            updateDescription = "New PR №" + latestPR;
         }
-        if (latestPR.isPresent() && latestPR.get() > link.getLatestPRNumber()) {
-            return true;
+        if (updateDescription != null) {
+            link.setLatestIssueNumber(latestIssue);
+            link.setLatestPRNumber(latestPR);
+            linksGithubRepository.update(link);
         }
-        OffsetDateTime updatedAt = repository.updatedAt();
-        return l.getLastUpdate().isBefore(updatedAt);
+        if (updateDescription == null && l.getLastUpdate().isBefore(repository.updatedAt())) {
+            updateDescription = "Unknown";
+        }
+        return updateDescription;
     }
 }

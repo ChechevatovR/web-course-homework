@@ -32,10 +32,13 @@ public class StackoverflowLinkUpdateChecker implements LinkUpdateChecker {
     }
 
     @Override
-    public boolean isUpdated(Link l) {
+    public String isUpdated(Link l) {
         StackoverflowLink link = new StackoverflowLink(l);
         Question question = stackOverflowClient.getQuestion(link.getQuestionId());
         OffsetDateTime updatedAt = question.lastActivityDate();
-        return link.getLastUpdate().isBefore(updatedAt);
+        if (link.getLastUpdate().isBefore(updatedAt)) {
+            return "Unknown";
+        }
+        return null;
     }
 }

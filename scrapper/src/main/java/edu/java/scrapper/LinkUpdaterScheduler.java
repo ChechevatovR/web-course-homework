@@ -52,10 +52,11 @@ public class LinkUpdaterScheduler {
                     if (!checker.isLinkSupported(link)) {
                         continue;
                     }
-                    if (checker.isUpdated(link)) {
-                        log.info("Found update on link " + link);
+                    String updateDescription = checker.isUpdated(link);
+                    if (updateDescription != null) {
+                        log.info("Found update (" + updateDescription + ") on link " + link);
                         link.setLastUpdate(now);
-                        notifyOnUpdate(link);
+                        notifyOnUpdate(updateDescription, link);
                         break;
                     }
                 } catch (RuntimeException e) {
@@ -68,11 +69,11 @@ public class LinkUpdaterScheduler {
         log.trace("Links update finish");
     }
 
-    void notifyOnUpdate(Link link) {
+    void notifyOnUpdate(String updateDescription, Link link) {
         Collection<LinkTracking> trackings = trackingRepository.findByLinkId(link.getId());
         LinkUpdate update = new LinkUpdate()
             .url(link.getUrl())
-            .description("Update");
+            .description(updateDescription);
         for (LinkTracking tracking : trackings) {
             Chat chat = chatsRepository.findById(tracking.getChatId());
             update.addTgChatIdsItem(chat.getTelegramChatId());
