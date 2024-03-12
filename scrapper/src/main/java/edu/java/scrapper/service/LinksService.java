@@ -1,9 +1,11 @@
 package edu.java.scrapper.service;
 
 import edu.java.scrapper.domain.ChatsRepository;
+import edu.java.scrapper.domain.LinksGithubRepository;
 import edu.java.scrapper.domain.LinksRepository;
 import edu.java.scrapper.domain.TrackingRepository;
 import edu.java.scrapper.domain.model.Chat;
+import edu.java.scrapper.domain.model.GithubLink;
 import edu.java.scrapper.domain.model.IsNewWrapper;
 import edu.java.scrapper.domain.model.Link;
 import edu.java.scrapper.domain.model.LinkTracking;
@@ -26,6 +28,9 @@ public class LinksService {
     private LinksRepository linksRepository;
 
     @Autowired
+    private LinksGithubRepository linksGithubRepository;
+
+    @Autowired
     private TrackingRepository trackingRepository;
 
     public IsNewWrapper<Link> add(long telegramChatId, URI url) {
@@ -34,6 +39,10 @@ public class LinksService {
             linksRepository.add(link);
         } catch (DuplicateKeyException e) {
             link = linksRepository.findByUrl(url);
+        }
+
+        if (GithubLink.isUrlSupported(url)) {
+            linksGithubRepository.add(new GithubLink(link));
         }
 
         Chat chat = chatsRepository.findByTelegramId(telegramChatId);
