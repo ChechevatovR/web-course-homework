@@ -11,9 +11,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class JdbcLinksRepositoryTest extends IntegrationTest {
+public abstract class AbstractLinksRepositoryTest extends IntegrationTest {
 
-    private LinksRepository repository = new JdbcLinksRepository(dataSource);
+    protected final LinksRepository repository;
+
+    public AbstractLinksRepositoryTest(LinksRepository repository) {
+        this.repository = repository;
+    }
 
     @BeforeEach
     void setUp() {

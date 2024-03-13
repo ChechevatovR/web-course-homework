@@ -8,9 +8,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class JdbcChatsRepositoryTest extends IntegrationTest {
+public abstract class AbstractChatsRepositoryTest extends IntegrationTest {
 
-    private ChatsRepository repository = new JdbcChatsRepository(dataSource);
+    protected final ChatsRepository repository;
+
+    public AbstractChatsRepositoryTest(ChatsRepository repository) {
+        this.repository = repository;
+    }
 
     @BeforeEach
     void setUp() {

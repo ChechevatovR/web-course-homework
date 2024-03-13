@@ -8,9 +8,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class JdbcTrackingRepositoryTest extends IntegrationTest {
+public abstract class AbstractTrackingRepositoryTest extends IntegrationTest {
 
-    private TrackingRepository repository = new JdbcTrackingRepository(dataSource);
+    protected TrackingRepository repository;
+
+    public AbstractTrackingRepositoryTest(TrackingRepository repository) {
+        this.repository = repository;
+    }
 
     @BeforeEach
     void setUp() {
