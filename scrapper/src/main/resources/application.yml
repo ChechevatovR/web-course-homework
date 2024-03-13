@@ -7,6 +7,7 @@ app:
     stackoverflow:
       base-url: "https://api.stackexchange.com/2.3"
       filter: "!BByLnZ1QNx_zLScMFi.8Pz6HIwMox1_ImiqaT5V1oBML_rwYaA-OOGYnkF0NLH*5-jYC--cO4ynL"
+  database-access-type: jooq
 
 spring:
   application:
