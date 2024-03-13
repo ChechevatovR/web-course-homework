@@ -11,11 +11,11 @@ public class StackoverflowLink extends Link {
     @SuppressWarnings("MagicNumber")
     public StackoverflowLink(
         Integer id,
-        URI url,
         OffsetDateTime lastCheck,
-        OffsetDateTime lastUpdate
+        OffsetDateTime lastUpdate,
+        URI url
     ) {
-        super(id, url, lastCheck, lastUpdate);
+        super(id, lastCheck, lastUpdate, url);
         if (getSite() != Site.STACKOVERFLOW) {
             throw new UnsupportedLink("Not a Stackoverflow link");
         }
@@ -34,7 +34,7 @@ public class StackoverflowLink extends Link {
     }
 
     public StackoverflowLink(Link link) {
-        this(link.getId(), link.getUrl(), link.getLastCheck(), link.getLastUpdate());
+        this(link.getId(), link.getLastCheck(), link.getLastUpdate(), link.getUrl());
     }
 
     public long getQuestionId() {

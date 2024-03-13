@@ -49,9 +49,9 @@ public abstract class AbstractLinksRepositoryTest extends IntegrationTest {
     void testAddProvidedId() {
         Link link = new Link(
             3,
-            URI.create("https://github.com/getify/You-Dont-Know-JS/"),
             Link.MIN_TIME,
-            Link.MIN_TIME
+            Link.MIN_TIME,
+            URI.create("https://github.com/getify/You-Dont-Know-JS/")
         );
         repository.add(link);
         Assertions.assertNotNull(link.getId());
@@ -123,9 +123,9 @@ public abstract class AbstractLinksRepositoryTest extends IntegrationTest {
         assertEquals(
             new Link(
                 2,
-                URI.create("https://stackoverflow.com/questions/47824636"),
                 OffsetDateTime.parse("2024-03-10T12:00:00Z"),
-                OffsetDateTime.parse("2024-03-10T12:00:00Z")
+                OffsetDateTime.parse("2024-03-10T12:00:00Z"),
+                URI.create("https://stackoverflow.com/questions/47824636")
             ),
             links.get(0)
         );

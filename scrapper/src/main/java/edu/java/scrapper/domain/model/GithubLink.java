@@ -11,20 +11,20 @@ public class GithubLink extends Link {
 
     public GithubLink(
         Integer id,
-        URI url,
         OffsetDateTime lastCheck,
         OffsetDateTime lastUpdate,
+        URI url,
         int latestIssueNumber,
         int latestPRNumber
     ) {
-        super(id, url, lastCheck, lastUpdate);
+        super(id, lastCheck, lastUpdate, url);
         this.latestIssueNumber = latestIssueNumber;
         this.latestPRNumber = latestPRNumber;
         checkUrlSupported(url);
     }
 
     public GithubLink(Link link) {
-        this(link.id, link.url, link.lastCheck, link.lastUpdate, -1, -1);
+        this(link.id, link.lastCheck, link.lastUpdate, link.url, -1, -1);
     }
 
     public String getOwner() {

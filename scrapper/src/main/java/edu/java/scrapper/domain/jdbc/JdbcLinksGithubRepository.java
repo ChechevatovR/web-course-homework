@@ -79,9 +79,9 @@ public class JdbcLinksGithubRepository implements LinksGithubRepository {
         public GithubLink mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new GithubLink(
                 rs.getInt(1),
-                URI.create(rs.getString(4)),
                 OffsetDateTime.parse(rs.getString(2), DATE_TIME_FORMATTER),
                 OffsetDateTime.parse(rs.getString(3), DATE_TIME_FORMATTER),
+                URI.create(rs.getString(4)),
                 rs.getInt(6),
                 rs.getInt(7)
             );
