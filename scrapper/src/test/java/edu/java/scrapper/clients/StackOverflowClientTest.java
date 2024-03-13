@@ -1,6 +1,8 @@
 package edu.java.scrapper.clients;
 
+import edu.java.scrapper.clients.github.GithubClientConfiguration;
 import edu.java.scrapper.clients.stackoverflow.StackOverflowClient;
+import edu.java.scrapper.clients.stackoverflow.StackOverflowClientConfiguration;
 import edu.java.scrapper.clients.stackoverflow.model.Answer;
 import edu.java.scrapper.clients.stackoverflow.model.Comment;
 import edu.java.scrapper.clients.stackoverflow.model.Question;
@@ -16,11 +18,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-@SpringBootTest
-@TestPropertySource(properties = "app.clients.stackoverflow.base-url=http://localhost:8089")
+
 public class StackOverflowClientTest extends AbstractClientTest {
-    @Autowired
     public StackOverflowClient client;
+
+    {
+        StackOverflowClientConfiguration configuration = new StackOverflowClientConfiguration();
+        configuration.filter = "whatever";
+        client = configuration.stackOverflowClient(configuration.stackOverflowApi("http://localhost:8089"));
+    }
 
     @Override
     public String resourceDirectoryName() {

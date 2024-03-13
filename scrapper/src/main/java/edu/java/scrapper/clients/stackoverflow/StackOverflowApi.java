@@ -7,5 +7,5 @@ import org.springframework.web.service.annotation.GetExchange;
 
 public interface StackOverflowApi {
     @GetExchange("/questions/{id}")
-    Wrapper<QuestionResponse> getQuestion(@PathVariable int id);
+    Wrapper<QuestionResponse> getQuestion(@PathVariable long id);
 }

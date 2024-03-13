@@ -19,6 +19,10 @@ public class StackOverflowClientConfiguration {
 
     @Bean
     public StackOverflowApi stackOverflowApi() {
+        return stackOverflowApi(baseUrl);
+    }
+
+    public StackOverflowApi stackOverflowApi(String baseUrl) {
         RestClient restClient = RestClient.builder()
             .baseUrl(baseUrl + "?site={site}&filter={filter}")
             .defaultUriVariables(Map.of(

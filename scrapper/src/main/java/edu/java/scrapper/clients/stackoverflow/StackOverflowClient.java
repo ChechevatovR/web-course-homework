@@ -9,7 +9,7 @@ public class StackOverflowClient {
         this.api = api;
     }
 
-    public Question getQuestion(int id) {
+    public Question getQuestion(long id) {
         return api.getQuestion(id).items().get(0).asModel();
     }
 }
