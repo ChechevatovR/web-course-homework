@@ -1,6 +1,7 @@
 package edu.java.scrapper.domain.jdbc;
 
 import edu.java.scrapper.domain.LinksGithubRepository;
+import edu.java.scrapper.domain.LinksRepository;
 import edu.java.scrapper.domain.model.GithubLink;
 import java.net.URI;
 import java.sql.ResultSet;
@@ -13,20 +14,25 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.transaction.annotation.Transactional;
 
 public class JdbcLinksGithubRepository implements LinksGithubRepository {
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssx");
     private final JdbcTemplate jdbc;
     private final SimpleJdbcInsert jdbcInsertLinksGithub;
+    private final LinksRepository linksRepository;
 
-    public JdbcLinksGithubRepository(DataSource dataSource) {
+    public JdbcLinksGithubRepository(DataSource dataSource, LinksRepository linksRepository) {
+        this.linksRepository = linksRepository;
         jdbc = new JdbcTemplate(dataSource);
         jdbcInsertLinksGithub = new SimpleJdbcInsert(jdbc)
             .withTableName("links_github");
     }
 
     @Override
+    @Transactional
     public GithubLink add(GithubLink link) {
+        linksRepository.add(link);
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("latest_issue_number", link.getLatestIssueNumber());
         parameterSource.addValue("latest_pr_number", link.getLatestPRNumber());
@@ -54,7 +60,9 @@ public class JdbcLinksGithubRepository implements LinksGithubRepository {
     }
 
     @Override
+    @Transactional
     public void update(GithubLink link) {
+        linksRepository.update(link);
         jdbc.update(
             """
             UPDATE links_github

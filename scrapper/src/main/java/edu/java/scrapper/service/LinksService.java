@@ -36,13 +36,15 @@ public class LinksService {
     public IsNewWrapper<Link> add(long telegramChatId, URI url) {
         Link link = new Link(url);
         try {
-            linksRepository.add(link);
+            if (GithubLink.isUrlSupported(url)) {
+                GithubLink githubLink = new GithubLink(link);
+                linksGithubRepository.add(githubLink);
+                link.setId(githubLink.getId());
+            } else {
+                linksRepository.add(link);
+            }
         } catch (DuplicateKeyException e) {
             link = linksRepository.findByUrl(url);
-        }
-
-        if (GithubLink.isUrlSupported(url)) {
-            linksGithubRepository.add(new GithubLink(link));
         }
 
         Chat chat = chatsRepository.findByTelegramId(telegramChatId);
