@@ -5,7 +5,9 @@ import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.Collection;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface LinksRepository {
     Link add(Link link);
 

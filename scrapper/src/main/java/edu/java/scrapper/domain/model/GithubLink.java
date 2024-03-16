@@ -6,15 +6,25 @@ import java.time.OffsetDateTime;
 
 public class GithubLink extends Link {
     public static final String REPOSITORY_PATH_NOT_FOUND = "Repository path not found";
+    private int latestIssueNumber;
+    private int latestPRNumber;
 
     public GithubLink(
         Integer id,
-        URI url,
         OffsetDateTime lastCheck,
-        OffsetDateTime lastUpdate
+        OffsetDateTime lastUpdate,
+        URI url,
+        int latestIssueNumber,
+        int latestPRNumber
     ) {
-        super(id, url, lastCheck, lastUpdate);
+        super(id, lastCheck, lastUpdate, url);
+        this.latestIssueNumber = latestIssueNumber;
+        this.latestPRNumber = latestPRNumber;
         checkUrlSupported(url);
+    }
+
+    public GithubLink(Link link) {
+        this(link.id, link.lastCheck, link.lastUpdate, link.url, -1, -1);
     }
 
     public String getOwner() {
@@ -23,6 +33,22 @@ public class GithubLink extends Link {
 
     public String getRepo() {
         return getRepo(url);
+    }
+
+    public int getLatestIssueNumber() {
+        return latestIssueNumber;
+    }
+
+    public void setLatestIssueNumber(int latestIssueNumber) {
+        this.latestIssueNumber = latestIssueNumber;
+    }
+
+    public int getLatestPRNumber() {
+        return latestPRNumber;
+    }
+
+    public void setLatestPRNumber(int latestPRNumber) {
+        this.latestPRNumber = latestPRNumber;
     }
 
     @SuppressWarnings("MagicNumber")
@@ -37,6 +63,15 @@ public class GithubLink extends Link {
         String[] splitted = path.split("/");
         if (splitted.length != 3 || !splitted[0].isEmpty()) {
             throw new UnsupportedLink(REPOSITORY_PATH_NOT_FOUND);
+        }
+    }
+
+    public static boolean isUrlSupported(final URI url) {
+        try {
+            checkUrlSupported(url);
+            return true;
+        } catch (UnsupportedLink e) {
+            return false;
         }
     }
 

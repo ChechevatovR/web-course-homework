@@ -15,9 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.RowMapperResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public class JdbcLinksRepository implements LinksRepository {
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssx");
     private final JdbcTemplate jdbc;
@@ -121,9 +119,9 @@ public class JdbcLinksRepository implements LinksRepository {
         public Link mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Link(
                 rs.getInt(1),
-                URI.create(rs.getString(4)),
                 OffsetDateTime.parse(rs.getString(2), DATE_TIME_FORMATTER),
-                OffsetDateTime.parse(rs.getString(3), DATE_TIME_FORMATTER)
+                OffsetDateTime.parse(rs.getString(3), DATE_TIME_FORMATTER),
+                URI.create(rs.getString(4))
             );
         }
     }

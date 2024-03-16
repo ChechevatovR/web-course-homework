@@ -15,6 +15,9 @@ public class ApplicationConfig {
     @NotNull
     Clients clients = new Clients();
 
+    @NotNull
+    DBAccessType databaseAccessType;
+
     public Scheduler getScheduler() {
         return scheduler;
     }
@@ -29,5 +32,17 @@ public class ApplicationConfig {
 
     void setClients(Clients clients) {
         this.clients = clients;
+    }
+
+    public DBAccessType getDatabaseAccessType() {
+        return databaseAccessType;
+    }
+
+    public void setDatabaseAccessType(DBAccessType databaseAccessType) {
+        this.databaseAccessType = databaseAccessType;
+    }
+
+    public enum DBAccessType {
+        JDBC, JOOQ
     }
 }

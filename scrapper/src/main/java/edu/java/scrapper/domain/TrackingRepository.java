@@ -2,7 +2,9 @@ package edu.java.scrapper.domain;
 
 import edu.java.scrapper.domain.model.LinkTracking;
 import java.util.Collection;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface TrackingRepository {
     LinkTracking add(LinkTracking tracking);
 

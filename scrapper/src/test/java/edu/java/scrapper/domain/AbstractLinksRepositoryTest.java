@@ -11,13 +11,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class JdbcLinksRepositoryTest extends IntegrationTest {
+public abstract class AbstractLinksRepositoryTest extends IntegrationTest {
 
-    private LinksRepository repository = new JdbcLinksRepository(dataSource);
+    protected LinksRepository repository;
 
     @BeforeEach
-    void setUp() {
-        jdbcTemplate.execute("TRUNCATE TABLE links, tracking");
+    protected void setUp() {
+        super.setUp();
+        jdbcTemplate.execute("TRUNCATE TABLE links, tracking, links_github");
         jdbcTemplate.execute(
             "INSERT INTO links VALUES " +
             "(1, '2024-03-10 13:00:00Z', '2024-03-10 12:00:00Z', 'https://github.com/Kotlin/kotlinx.coroutines'), " +
@@ -45,9 +46,9 @@ public class JdbcLinksRepositoryTest extends IntegrationTest {
     void testAddProvidedId() {
         Link link = new Link(
             3,
-            URI.create("https://github.com/getify/You-Dont-Know-JS/"),
             Link.MIN_TIME,
-            Link.MIN_TIME
+            Link.MIN_TIME,
+            URI.create("https://github.com/getify/You-Dont-Know-JS/")
         );
         repository.add(link);
         Assertions.assertNotNull(link.getId());
@@ -119,9 +120,9 @@ public class JdbcLinksRepositoryTest extends IntegrationTest {
         assertEquals(
             new Link(
                 2,
-                URI.create("https://stackoverflow.com/questions/47824636"),
                 OffsetDateTime.parse("2024-03-10T12:00:00Z"),
-                OffsetDateTime.parse("2024-03-10T12:00:00Z")
+                OffsetDateTime.parse("2024-03-10T12:00:00Z"),
+                URI.create("https://stackoverflow.com/questions/47824636")
             ),
             links.get(0)
         );

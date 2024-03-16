@@ -9,29 +9,29 @@ import java.util.StringJoiner;
 public class Link {
     public static final OffsetDateTime MIN_TIME = OffsetDateTime.ofInstant(Instant.EPOCH, ZoneId.of("GMT"));
     protected Integer id;
-    protected URI url;
     protected OffsetDateTime lastCheck;
     protected OffsetDateTime lastUpdate;
+    protected URI url;
 
     public Link(
         Integer id,
-        URI url,
         OffsetDateTime lastCheck,
-        OffsetDateTime lastUpdate
+        OffsetDateTime lastUpdate,
+        URI url
     ) {
         this.id = id;
-        this.url = url;
         this.lastCheck = lastCheck;
         this.lastUpdate = lastUpdate;
+        this.url = url;
         Site.forHost(url.getHost());
     }
 
     public Link(URI url) {
         this(
             null,
-            url,
             MIN_TIME,
-            MIN_TIME
+            MIN_TIME,
+            url
         );
     }
 

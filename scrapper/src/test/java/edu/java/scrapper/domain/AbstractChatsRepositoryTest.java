@@ -8,12 +8,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class JdbcChatsRepositoryTest extends IntegrationTest {
+public abstract class AbstractChatsRepositoryTest extends IntegrationTest {
 
-    private ChatsRepository repository = new JdbcChatsRepository(dataSource);
+    protected ChatsRepository repository;
 
     @BeforeEach
-    void setUp() {
+    protected void setUp() {
+        super.setUp();
         jdbcTemplate.execute("TRUNCATE TABLE chats, tracking");
         jdbcTemplate.execute("INSERT INTO chats VALUES (1, 11), (2, 22), (3, 33)");
         jdbcTemplate.execute("ALTER SEQUENCE chats_id_seq RESTART WITH 4");

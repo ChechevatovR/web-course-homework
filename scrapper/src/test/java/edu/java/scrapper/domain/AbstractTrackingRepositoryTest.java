@@ -8,13 +8,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class JdbcTrackingRepositoryTest extends IntegrationTest {
+public abstract class AbstractTrackingRepositoryTest extends IntegrationTest {
 
-    private TrackingRepository repository = new JdbcTrackingRepository(dataSource);
+    protected TrackingRepository repository;
 
     @BeforeEach
-    void setUp() {
-        jdbcTemplate.execute("TRUNCATE TABLE tracking, chats, links");
+    protected void setUp() {
+        super.setUp();
+        jdbcTemplate.execute("TRUNCATE TABLE tracking, chats, links, links_github");
         jdbcTemplate.execute("INSERT INTO chats VALUES (1, 11), (2, 22), (3, 33)");
         jdbcTemplate.execute(
             "INSERT INTO links VALUES " +
