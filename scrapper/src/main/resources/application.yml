@@ -12,6 +12,9 @@ app:
 spring:
   application:
     name: scrapper
+  jpa:
+    hibernate:
+      ddl-auto: validate
   liquibase:
     enabled: false
 
