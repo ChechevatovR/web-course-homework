@@ -5,6 +5,6 @@ import edu.java.scrapper.domain.AbstractLinksGithubRepositoryTest;
 public class JdbcLinksGithubRepositoryTest extends AbstractLinksGithubRepositoryTest {
 
     public JdbcLinksGithubRepositoryTest() {
-        super(new JdbcLinksGithubRepository(dataSource, new JdbcLinksRepository(dataSource)));
+        repository = new JdbcLinksGithubRepository(dataSource, new JdbcLinksRepository(dataSource));
     }
 }

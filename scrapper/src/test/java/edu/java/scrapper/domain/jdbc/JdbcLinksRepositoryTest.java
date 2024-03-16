@@ -5,6 +5,6 @@ import edu.java.scrapper.domain.AbstractLinksRepositoryTest;
 public class JdbcLinksRepositoryTest extends AbstractLinksRepositoryTest {
 
     public JdbcLinksRepositoryTest() {
-        super(new JdbcLinksRepository(dataSource));
+        repository = new JdbcLinksRepository(dataSource);
     }
 }

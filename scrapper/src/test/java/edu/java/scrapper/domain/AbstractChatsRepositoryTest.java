@@ -10,14 +10,11 @@ import org.junit.jupiter.api.Test;
 
 public abstract class AbstractChatsRepositoryTest extends IntegrationTest {
 
-    protected final ChatsRepository repository;
-
-    public AbstractChatsRepositoryTest(ChatsRepository repository) {
-        this.repository = repository;
-    }
+    protected ChatsRepository repository;
 
     @BeforeEach
-    void setUp() {
+    protected void setUp() {
+        super.setUp();
         jdbcTemplate.execute("TRUNCATE TABLE chats, tracking");
         jdbcTemplate.execute("INSERT INTO chats VALUES (1, 11), (2, 22), (3, 33)");
         jdbcTemplate.execute("ALTER SEQUENCE chats_id_seq RESTART WITH 4");

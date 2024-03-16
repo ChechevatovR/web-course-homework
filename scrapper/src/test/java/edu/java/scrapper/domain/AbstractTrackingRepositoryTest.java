@@ -12,12 +12,9 @@ public abstract class AbstractTrackingRepositoryTest extends IntegrationTest {
 
     protected TrackingRepository repository;
 
-    public AbstractTrackingRepositoryTest(TrackingRepository repository) {
-        this.repository = repository;
-    }
-
     @BeforeEach
-    void setUp() {
+    protected void setUp() {
+        super.setUp();
         jdbcTemplate.execute("TRUNCATE TABLE tracking, chats, links, links_github");
         jdbcTemplate.execute("INSERT INTO chats VALUES (1, 11), (2, 22), (3, 33)");
         jdbcTemplate.execute(

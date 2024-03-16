@@ -13,14 +13,11 @@ import org.junit.jupiter.api.Test;
 
 public abstract class AbstractLinksRepositoryTest extends IntegrationTest {
 
-    protected final LinksRepository repository;
-
-    public AbstractLinksRepositoryTest(LinksRepository repository) {
-        this.repository = repository;
-    }
+    protected LinksRepository repository;
 
     @BeforeEach
-    void setUp() {
+    protected void setUp() {
+        super.setUp();
         jdbcTemplate.execute("TRUNCATE TABLE links, tracking, links_github");
         jdbcTemplate.execute(
             "INSERT INTO links VALUES " +

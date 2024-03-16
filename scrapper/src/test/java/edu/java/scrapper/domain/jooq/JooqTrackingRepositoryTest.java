@@ -6,6 +6,6 @@ import edu.java.scrapper.domain.jdbc.JdbcTrackingRepository;
 public class JooqTrackingRepositoryTest extends AbstractTrackingRepositoryTest {
 
     public JooqTrackingRepositoryTest() {
-        super(new JooqTrackingRepository(dataSource));
+        repository = new JooqTrackingRepository(dataSource);
     }
 }

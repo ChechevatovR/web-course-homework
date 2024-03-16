@@ -12,16 +12,11 @@ import org.junit.jupiter.api.Test;
 
 public abstract class AbstractLinksGithubRepositoryTest extends IntegrationTest {
 
-    protected final LinksGithubRepository repository;
-
-    public AbstractLinksGithubRepositoryTest(
-        LinksGithubRepository repository
-    ) {
-        this.repository = repository;
-    }
+    protected LinksGithubRepository repository;
 
     @BeforeEach
-    void setUp() {
+    protected void setUp() {
+        super.setUp();
         jdbcTemplate.execute("TRUNCATE TABLE links, tracking, links_github");
         jdbcTemplate.execute(
             "INSERT INTO links VALUES " +
@@ -38,7 +33,29 @@ public abstract class AbstractLinksGithubRepositoryTest extends IntegrationTest 
     }
 
     @Test
-    void testAdd() {
+    void testAddGeneratedId() {
+        GithubLink link = new GithubLink(
+            null,
+            Link.MIN_TIME,
+            Link.MIN_TIME,
+            URI.create("https://github.com/getify/You-Dont-Know-JS/"),
+            401,
+            402
+        );
+        repository.add(link);
+        Assertions.assertNotNull(link.getId());
+        Assertions.assertEquals(4, link.getId());
+        GithubLink linkFetched = jdbcTemplate.queryForObject(
+            "SELECT * FROM links JOIN links_github lg on links.id = lg.id WHERE links.id = ?",
+            JdbcLinksGithubRepository.GithubLinkRowMapper.INSTANCE,
+            link.getId()
+        );
+        Assertions.assertNotNull(linkFetched);
+        assertEquals(link, linkFetched);
+    }
+
+    @Test
+    void testAddProvidedId() {
         GithubLink link = new GithubLink(
             4,
             Link.MIN_TIME,

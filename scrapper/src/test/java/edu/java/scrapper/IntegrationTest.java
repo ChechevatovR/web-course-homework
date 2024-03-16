@@ -14,7 +14,9 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.DirectoryResourceAccessor;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -30,7 +32,6 @@ public abstract class IntegrationTest {
     public static JdbcConnection jdbcConnection;
     public static DataSource dataSource;
     public static JdbcTemplate jdbcTemplate;
-
 
     static {
         POSTGRES = new PostgreSQLContainer<>("postgres:16")
@@ -73,5 +74,13 @@ public abstract class IntegrationTest {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
+    }
+
+    @BeforeEach
+    protected void setUp() {
+    }
+
+    @AfterEach
+    protected void tearDown() {
     }
 }

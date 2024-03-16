@@ -6,6 +6,6 @@ import edu.java.scrapper.domain.jdbc.JdbcLinksRepository;
 public class JooqLinksRepositoryTest extends AbstractLinksRepositoryTest {
 
     public JooqLinksRepositoryTest() {
-        super(new JooqLinksRepository(dataSource));
+        repository = new JooqLinksRepository(dataSource);
     }
 }
