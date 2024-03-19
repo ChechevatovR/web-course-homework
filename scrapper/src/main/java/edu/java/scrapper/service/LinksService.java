@@ -14,7 +14,9 @@ import edu.java.scrapper.exception.LinkNotFound;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
+import org.jooq.exception.IntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +45,7 @@ public class LinksService {
             } else {
                 linksRepository.add(link);
             }
-        } catch (DuplicateKeyException e) {
+        } catch (DataIntegrityViolationException | IntegrityConstraintViolationException e) {
             link = linksRepository.findByUrl(url);
         }
 
@@ -54,7 +56,7 @@ public class LinksService {
         try {
             trackingRepository.add(new LinkTracking(chat.getId(), link.getId()));
             return new IsNewWrapper<>(true, link);
-        } catch (DuplicateKeyException e) {
+        } catch (DuplicateKeyException | IntegrityConstraintViolationException e) {
             return new IsNewWrapper<>(false, link);
         }
 
