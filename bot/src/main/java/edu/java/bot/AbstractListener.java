@@ -88,7 +88,11 @@ public abstract class AbstractListener implements UpdatesListener {
                 sendMessage(update, "Ошибка вызова команды: " + e);
             }
             case MethodHandlerInvocationException e -> {
-                sendMessage(update, "В боте произошла ошибка: " + e.getCause());
+                if (e.getCause() instanceof BotException botException) {
+                    handleException(update, botException);
+                } else {
+                    sendMessage(update, "В боте произошла ошибка: " + e.getCause());
+                }
             }
             case MethodHandlerSignatureException e -> {
                 // Method signature must have been checked at startup
