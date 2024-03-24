@@ -43,6 +43,6 @@ public class ApplicationConfig {
     }
 
     public enum DBAccessType {
-        JDBC, JOOQ
+        JDBC, JOOQ, JPA
     }
 }

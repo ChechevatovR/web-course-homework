@@ -7,6 +7,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
+import edu.java.bot.exceptions.BadCommandUsage;
 import edu.java.bot.exceptions.BotException;
 import edu.java.bot.exceptions.MethodHandlerInvocationException;
 import edu.java.bot.exceptions.MethodHandlerSignatureException;
@@ -83,8 +84,15 @@ public abstract class AbstractListener implements UpdatesListener {
             case NoCommandInMessage e -> {
                 sendMessage(update, "В сообщении не найдено команды");
             }
+            case BadCommandUsage e -> {
+                sendMessage(update, "Ошибка вызова команды: " + e);
+            }
             case MethodHandlerInvocationException e -> {
-                sendMessage(update, "В боте произошла ошибка: " + e.getCause());
+                if (e.getCause() instanceof BotException botException) {
+                    handleException(update, botException);
+                } else {
+                    sendMessage(update, "В боте произошла ошибка: " + e.getCause());
+                }
             }
             case MethodHandlerSignatureException e -> {
                 // Method signature must have been checked at startup

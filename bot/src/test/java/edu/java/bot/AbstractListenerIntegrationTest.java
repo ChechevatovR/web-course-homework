@@ -6,12 +6,13 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.annotations.BotCommand;
-import java.util.List;
-import java.util.stream.IntStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class AbstractListenerIntegrationTest {
 
@@ -22,7 +23,7 @@ public class AbstractListenerIntegrationTest {
     void testMethodDispatchSuccess() {
         ArgumentCaptor<SendMessage> captor = ArgumentCaptor.forClass(SendMessage.class);
 
-        Update update = TestUtils.mockMessage("/track");
+        Update update = TestUtils.mockMessage(200, "/list");
 
         listener.process(List.of(update));
 
@@ -30,7 +31,7 @@ public class AbstractListenerIntegrationTest {
 
         SendMessage captured = captor.getValue();
 
-        Assertions.assertEquals("onTrack", captured.getParameters().get("text"));
+        Assertions.assertEquals("Список пуст", captured.getParameters().get("text"));
         Assertions.assertEquals(ParseMode.Markdown.name(), captured.getParameters().get("parse_mode"));
     }
 
@@ -39,9 +40,9 @@ public class AbstractListenerIntegrationTest {
         ArgumentCaptor<SendMessage> captor = ArgumentCaptor.forClass(SendMessage.class);
 
         List<Update> updates = IntStream.range(0, 16)
-                .mapToObj(i -> "/untrack " + i)
-                .map(TestUtils::mockMessage)
-                .toList();
+            .mapToObj(i -> "/untrack " + i)
+            .map(text -> TestUtils.mockMessage(200, text))
+            .toList();
 
         int processed = listener.process(updates);
         Assertions.assertEquals(UpdatesListener.CONFIRMED_UPDATES_ALL, processed);
@@ -52,7 +53,7 @@ public class AbstractListenerIntegrationTest {
         for (int i = 0; i < 16; i++) {
             SendMessage capturedMsg = captured.get(i);
 
-            Assertions.assertEquals("onUntrack", capturedMsg.getParameters().get("text"));
+            Assertions.assertEquals("Ссылка удалена", capturedMsg.getParameters().get("text"));
             Assertions.assertEquals(ParseMode.Markdown.name(), capturedMsg.getParameters().get("parse_mode"));
         }
     }

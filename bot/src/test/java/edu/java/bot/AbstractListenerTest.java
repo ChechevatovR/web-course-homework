@@ -3,14 +3,11 @@ package edu.java.bot;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.annotations.BotCommand;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.Description;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class AbstractListenerTest {
 
@@ -18,7 +15,7 @@ public class AbstractListenerTest {
 
     @Test
     void testHelpMessage() {
-        UpdateNotifierListener listener = new UpdateNotifierListener(bot);
+        UpdateNotifierListener listener = new UpdateNotifierListener(bot, null);
         String s = listener.onHelp(null);
 
         List<String> lines = s.lines().toList();

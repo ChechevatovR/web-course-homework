@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 @Component
 @Log4j2
@@ -79,7 +80,8 @@ public class LinkUpdaterScheduler {
             update.addTgChatIdsItem(chat.getTelegramChatId());
         }
         if (!update.getTgChatIds().isEmpty()) {
-            botClient.updatesPost(update);
+            Mono<Void> mono = botClient.updatesPost(update);
+            mono.block();
         }
     }
 }

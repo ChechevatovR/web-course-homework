@@ -1,8 +1,8 @@
 package edu.java.bot.exceptions;
 
 public abstract sealed class BotException extends RuntimeException
-    permits MethodHandlerInvocationException, MethodHandlerSignatureException, NoCommandInMessage, UnknownCommand,
-    UnsupportedUpdate {
+    permits BadCommandUsage, MethodHandlerInvocationException, MethodHandlerSignatureException, NoCommandInMessage,
+    UnknownCommand, UnsupportedUpdate {
     protected BotException() {
     }
 
