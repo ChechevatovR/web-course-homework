@@ -6,6 +6,11 @@ spring:
     name: bot
   jackson:
     time-zone: UTC
+  cache:
+    cache-names:
+      - rate-limit-buckets
+    caffeine:
+      spec: maximumSize=100000,expireAfterAccess=3600s
 
 server:
   port: 8090
@@ -16,3 +21,14 @@ logging:
 springdoc:
   swagger-ui:
     path: "/swagger-ui"
+
+bucket4j:
+  enabled: true
+  filters:
+    - cache-name: rate-limit-buckets
+      rate-limits:
+        - cache-key: "getRemoteAddr()"
+          bandwidths:
+            - capacity: 15
+              time: 1
+              unit: minutes
