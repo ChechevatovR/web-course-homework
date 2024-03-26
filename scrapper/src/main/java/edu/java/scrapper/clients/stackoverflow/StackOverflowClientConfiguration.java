@@ -1,7 +1,9 @@
 package edu.java.scrapper.clients.stackoverflow;
 
 import edu.java.scrapper.clients.GZIPDecompressingInterceptor;
+import edu.java.scrapper.clients.RetryingInterceptor;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +19,9 @@ public class StackOverflowClientConfiguration {
     @Value("#{@applicationConfig.clients.stackoverflow.filter}")
     public String filter;
 
+    @Autowired
+    public RetryingInterceptor retryingInterceptor;
+
     @Bean
     public StackOverflowApi stackOverflowApi() {
         RestClient restClient = RestClient.builder()
@@ -26,6 +31,7 @@ public class StackOverflowClientConfiguration {
                 "filter", filter
             ))
             .requestInterceptor(new GZIPDecompressingInterceptor())
+            .requestInterceptor(retryingInterceptor)
             .build();
         RestClientAdapter adapter = RestClientAdapter.create(restClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter).build();

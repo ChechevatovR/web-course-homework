@@ -244,7 +244,7 @@
                             <generateApiTests>false</generateApiTests>
                             <generateApiDocumentation>false</generateApiDocumentation>
                             <configOptions>
-                                <library>webclient</library>
+                                <library>resttemplate</library>
                                 <useJakartaEe>true</useJakartaEe>
                             </configOptions>
                         </configuration>
