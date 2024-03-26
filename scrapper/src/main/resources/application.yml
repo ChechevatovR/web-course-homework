@@ -7,10 +7,18 @@ app:
     stackoverflow:
       base-url: "https://api.stackexchange.com/2.3"
       filter: "!BByLnZ1QNx_zLScMFi.8Pz6HIwMox1_ImiqaT5V1oBML_rwYaA-OOGYnkF0NLH*5-jYC--cO4ynL"
+    retry:
+      retry-for: 429, 5xx
+      backoff-policy: LINEAR
 
 spring:
   application:
     name: scrapper
+  cache:
+    cache-names:
+      - rate-limit-buckets
+    caffeine:
+      spec: maximumSize=100000,expireAfterAccess=3600s
   liquibase:
     enabled: false
 
@@ -23,3 +31,14 @@ logging:
 springdoc:
   swagger-ui:
     path: "/swagger-ui"
+
+bucket4j:
+  enabled: true
+  filters:
+    - cache-name: rate-limit-buckets
+      rate-limits:
+        - cache-key: "getRemoteAddr()"
+          bandwidths:
+            - capacity: 15
+              time: 1
+              unit: minutes

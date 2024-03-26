@@ -1,19 +1,23 @@
 package edu.java.scrapper.clients;
 
-
-import edu.java.scrapper.clients.github.model.*;
 import edu.java.scrapper.clients.github.GithubClient;
+import edu.java.scrapper.clients.github.model.Issue;
+import edu.java.scrapper.clients.github.model.PullRequest;
+import edu.java.scrapper.clients.github.model.Repository;
+import edu.java.scrapper.clients.github.model.User;
+import java.io.IOException;
+import java.net.URI;
+import java.time.OffsetDateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
-import java.io.IOException;
-import java.net.URI;
-import java.time.OffsetDateTime;
 
 @SpringBootTest
+@DirtiesContext
 @TestPropertySource(properties = "app.clients.github.base-url=http://localhost:8089")
 public class GithubClientTest extends AbstractClientTest {
 
